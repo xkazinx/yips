@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="App.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="yips.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandArguments.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_demo.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_draw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_tables.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_widgets.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui-SFML.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenario.cpp">
+      <Filter>scene\scenario</Filter>
+    </ClCompile>
+    <ClCompile Include="ScenarioEditor.cpp">
+      <Filter>scene\scenario</Filter>
+    </ClCompile>
+    <ClCompile Include="ScenarioScene.cpp">
+      <Filter>scene\scenario</Filter>
+    </ClCompile>
+    <ClCompile Include="StartScene.cpp">
+      <Filter>scene\start</Filter>
+    </ClCompile>
+    <ClCompile Include="Global.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>scene\object</Filter>
+    </ClCompile>
+    <ClCompile Include="Background.cpp">
+      <Filter>scene\object\background</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectShip1.cpp">
+      <Filter>scene\object\ship</Filter>
+    </ClCompile>
+    <ClCompile Include="Obstacle1.cpp">
+      <Filter>scene\object\obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Random.cpp">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprites.cpp">
+      <Filter>sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Chunk.cpp" />
+    <ClCompile Include="Projectile1.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="app">
+      <UniqueIdentifier>{35fe0b16-edd9-4600-9a5d-fcf40916ef9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scene">
+      <UniqueIdentifier>{cf4b46e6-91b6-4e9e-909c-b796b7f62fbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib">
+      <UniqueIdentifier>{972abc7e-db9f-42e6-a461-e6a300a8718d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{89a6a73f-7b77-4fe5-a6af-ab82d53e3915}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scene\scenario">
+      <UniqueIdentifier>{cd40e23e-45da-4dac-bdfa-292dc8a99ebf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scene\start">
+      <UniqueIdentifier>{8862d411-1716-4c0d-8d51-8ab79af71e48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scene\object">
+      <UniqueIdentifier>{041602fa-76e8-4307-ba3d-b4c1e17d2592}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scene\object\background">
+      <UniqueIdentifier>{415f37c1-fc48-4b5b-8197-e3fab8d91e38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scene\object\ship">
+      <UniqueIdentifier>{df02b85e-7f16-4ad3-80c8-876ee8e426e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scene\object\obstacle">
+      <UniqueIdentifier>{4154ff57-292a-4074-b160-81afb2ff6679}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="misc">
+      <UniqueIdentifier>{4db8fcdc-d0a4-4c4a-8de6-c818a0c8e2f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprite">
+      <UniqueIdentifier>{3e4bc8ea-1910-4255-9264-942bb7c76fe9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scene\object\projectile">
+      <UniqueIdentifier>{97e5fbb2-68a1-4424-a1a4-c309bf51bc06}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="App.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandArguments.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="magic_enum.h">
+      <Filter>lib</Filter>
+    </ClInclude>
+    <ClInclude Include="rang.hpp">
+      <Filter>lib</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_internal.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui-SFML.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui-SFML_export.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_rectpack.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_textedit.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_truetype.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenario.h">
+      <Filter>scene\scenario</Filter>
+    </ClInclude>
+    <ClInclude Include="ScenarioEditor.h">
+      <Filter>scene\scenario</Filter>
+    </ClInclude>
+    <ClInclude Include="ScenarioScene.h">
+      <Filter>scene\scenario</Filter>
+    </ClInclude>
+    <ClInclude Include="StartScene.h">
+      <Filter>scene\start</Filter>
+    </ClInclude>
+    <ClInclude Include="Global.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>scene\object</Filter>
+    </ClInclude>
+    <ClInclude Include="Background.h">
+      <Filter>scene\object\background</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectShip1.h">
+      <Filter>scene\object\ship</Filter>
+    </ClInclude>
+    <ClInclude Include="Obstacle1.h">
+      <Filter>scene\object\obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imconfig.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h">
+      <Filter>misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprites.h">
+      <Filter>sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Chunk.h" />
+    <ClInclude Include="Projectile1.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="notes.txt">
+      <Filter>app</Filter>
+    </Text>
+  </ItemGroup>
+</Project>
