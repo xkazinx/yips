@@ -10,7 +10,11 @@ void StarsBackground::Generate()
 	constexpr auto kStarsCount = 256;
 	for(int i = 0; i < kStarsCount; ++i)
 	{
-		_vertex_positions.push_back({ (float)g_rand->Generate<u16>(0u, kChunkSizeX), (float)g_rand->Generate<u16>(0u, kChunkSizeY) });
+		_vertex_positions.push_back({ 
+			(float)g_rand->Generate<int>(0, kChunkSizeX), 
+			(float)g_rand->Generate<int>(_end_y, _origin_y)
+		});
+
 		_vertex_shapes.push_back(sf::Vertex(
 			{
 				_vertex_positions.back()
@@ -21,11 +25,17 @@ void StarsBackground::Generate()
 
 void StarsBackground::Render(sf::RenderTarget & wnd, sf::Time delta_time)
 {
+	for(size_t i = 0; i < _vertex_shapes.size(); ++i)
+	{
+		auto & star = _vertex_shapes[i];
+		wnd.draw(&star, 1, sf::PrimitiveType::Points);
+	}
 	//auto & view = g_app->_wnd.getDefaultView();
 
 	//PrintDebug("StarsBackground Render");
 	// todo: only draw the ones on sight
-	for(size_t i = 0; i < _vertex_shapes.size(); ++i)
+	
+	/*for(size_t i = 0; i < _vertex_shapes.size(); ++i)
 	{
 		auto & star = _vertex_shapes[i];
 
@@ -35,14 +45,14 @@ void StarsBackground::Render(sf::RenderTarget & wnd, sf::Time delta_time)
 		}
 		else if (_chunk_idx == Scenario::Current->_current_chunk + 1)
 		{
-			star.position.y = { _origin_y + abs(Scenario::Current->_camera_y) + _vertex_positions[i].y /*+ (abs((int)Scenario::Current->_camera_y % (int)kChunkSizeY)) */};
+			star.position.y = { _origin_y + abs(Scenario::Current->_camera_y) + _vertex_positions[i].y };
 		}
 		
 		//if(Scenario::Current->IsOnSight(star.position.x, star.position.y))
 		{
 			wnd.draw(&star, 1, sf::PrimitiveType::Points);
 		}
-	}
+	}*/
 
 	//g_app->_wnd.setView(view);
 }

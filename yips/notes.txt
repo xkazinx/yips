@@ -25,9 +25,8 @@ Scene
 
 Scene
 	Scenario
-		Object
-			
-			Inherits:
+		Object, Inherits:
+
 			Background
 				_origin, _width, GetEndingWorldPos();
 

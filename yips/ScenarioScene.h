@@ -14,7 +14,7 @@ public:
 	void Render(sf::RenderWindow & wnd, sf::Time delta_time) override;
 	void Tick(sf::Time delta_time) override;
 
-	ObjectShip1 * _ship;
+	unique_ptr<ObjectShip1> _ship;
 
 	unique_ptr<Scenario> _scenario;
 };

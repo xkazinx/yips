@@ -2,23 +2,25 @@
 #include "Object.h"
 
 class Chunk;
+class Background;
+
 class Scenario : public Object
 {
 public:
 	static Scenario * Current;
 
-	Scenario(ChunkIdx chunks);
+	Scenario(uint end_y);
 	Scenario(const Json & json) { Load(json); }
 	void Load(const Json & json);
-	void Initialize(ChunkIdx chunk_cnt);
+	void Initialize(uint end_y);
 
 	void Render(sf::RenderTarget & wnd, sf::Time delta_time) override;
 	void Tick(sf::Time delta_time) override;
 	void Move(float x, float y) override;
 
-	sf::Vector2u GetChunks();
-
 public:
+	sf::View _view;
+
 	float _camera_x, _camera_y;
 	void SetCameraPoint(float x, float y);
 	
@@ -49,6 +51,9 @@ public:
 	}
 
 public:
-	vector<Object> _projectiles;
+	vector<unique_ptr<Object>> _projectiles;
+
+public:
+	vector<Background*> _background_layers;
 };
 

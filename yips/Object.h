@@ -21,6 +21,19 @@ public:
 		PrintDebug("SetInitialPosition({}, {})", x, y);
 	}
 
+	bool IsCollision(const Object * object) const
+	{
+		return GetCollisionRect().intersects(object->GetCollisionRect());
+	}
+
+	virtual sf::FloatRect GetCollisionRect() const {
+		return {};
+	};
+
+	virtual void HandleCollision() {
+		
+	}
+
 	template<typename T = Object>
 	T * AddObject(unique_ptr<Object> && object)
 	{
@@ -32,5 +45,19 @@ public:
 
 	ObjectID _id;
 	Vector2f _pos, _initial_pos;
+
+private:
+	bool _expired = false;
+
+public:
+	bool HasExpired() const
+	{
+		return _expired;
+	}
+
+	virtual void Expire() 
+	{
+		_expired = true;
+	}
 };
 

@@ -12,7 +12,7 @@ ObjectShip1::ObjectShip1()
 
 	_ship_sprite->_spr.setTexture(_ship_sprite->_texture);
 	_ship_sprite->_spr.setScale({ scale, scale });
-	_ship_sprite->_spr.setPosition(g_res_x / 2.f, g_res_y - _ship_sprite->_spr.getTexture()->getSize().y * scale);
+	_ship_sprite->_spr.setPosition(g_res_x / 2.f, -(kChunkSizeY / 4) + (_ship_sprite->_spr.getTexture()->getSize().y * scale));
 }
 
 bool ObjectShip1::HandleEvents(sf::Event & event) 
@@ -22,6 +22,11 @@ bool ObjectShip1::HandleEvents(sf::Event & event)
 
 void ObjectShip1::Tick(sf::Time delta_time)
 {
+	{
+      float velocity = 50.f;
+      _ship_sprite->Move(0, -velocity * delta_time.asSeconds());
+   }
+
 	Object::Tick(delta_time);
 }
 
@@ -52,7 +57,7 @@ void ObjectShip1::Render(sf::RenderTarget& wnd, sf::Time delta_time)
 	{
 		_ship_sprite->Move(0.f, velocity * delta_time.asSeconds());
 	}
-
+	/*
 	auto rect = _ship_sprite->_spr.getGlobalBounds(); // make GetRect function
 	if(rect.left + rect.width > g_res_x)
 	{
@@ -72,5 +77,5 @@ void ObjectShip1::Render(sf::RenderTarget& wnd, sf::Time delta_time)
 	if (rect.top < 0)
 	{
 		_ship_sprite->SetPosition(_ship_sprite->GetPosition().x, 0);
-	}
+	}*/
 }

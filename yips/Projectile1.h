@@ -11,8 +11,20 @@ public:
 	void Tick(sf::Time delta_time) override;
 
 	void SetPosition(float x, float y) override;
+	Vector2f GetPosition() override
+	{
+		return _shape.getPosition();
+	}
 
-	bool Collides(float x, float y) const;
+	sf::FloatRect GetCollisionRect() const override
+	{
+		return _shape.getGlobalBounds();
+	}
+
+	void HandleCollision() override
+	{
+		Expire();
+	}
 
 	sf::CircleShape _shape;
 	Vector2f _origin;

@@ -14,6 +14,5 @@ public:
 
 	float _origin_x, _origin_y;
 
-	vector<Background*> _background_layers; 
 };
 

@@ -16,7 +16,7 @@ void ScenarioEditor::ShiftObstacle(bool next)
 {
 	array<sf::Color, 2> kColors = { sf::Color::White, sf::Color::Blue };
 	static u8 sIdx = 0;
-	_current_obstacle = make_unique<Obstacle1>();
+	_current_obstacle = make_unique<Obstacle1>(50.f, 50.f);
 	_current_obstacle->_color = kColors[sIdx++];
 	if (sIdx >= kColors.size())
 		sIdx = 0;
@@ -61,7 +61,7 @@ bool ScenarioEditor::HandleEvents(sf::Event& event)
 		break;
 
 	case sf::Event::EventType::MouseButtonPressed:
-		if(event.mouseButton.button == sf::Mouse::Left)
+		/*if(event.mouseButton.button == sf::Mouse::Left)
 		{
 			if(!_scenario)
 				return false;
@@ -79,7 +79,7 @@ bool ScenarioEditor::HandleEvents(sf::Event& event)
 				floor(chunk_idx), _scenario->_camera_y, event.mouseButton.y, y);
 			
 			obj->SetInitialPosition(x, y);
-		}
+		}*/
 		break;
 	}
 	return false;

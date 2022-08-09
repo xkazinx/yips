@@ -7,6 +7,7 @@
 #include "Background.h"
 #include "Scenario.h"
 #include "Chunk.h"
+#include "ObjectShip1.h"
 
 Scenes::Scenes()
 {

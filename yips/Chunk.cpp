@@ -5,8 +5,7 @@
 Chunk::Chunk(ChunkIdx idx)
 	: Object(ObjectID::Chunk), _idx(idx), _origin_x(0), _origin_y(idx * -kChunkSizeY)
 {
-	auto bg = AddObject<StarsBackground>(make_unique<StarsBackground>(idx));
-	_background_layers.push_back(bg);
+	//_background_layers.push_back(bg);
 }
 
 void Chunk::Render(sf::RenderTarget & wnd, sf::Time delta_time)

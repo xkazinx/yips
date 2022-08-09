@@ -4,26 +4,25 @@
 class Background : public Object
 {
 public:
-	Background(ChunkIdx chunk_idx)
-		: _chunk_idx(chunk_idx)
+	Background(float origin_y, float height) 
+		: _origin_x(0), _origin_y(origin_y), _end_y(origin_y - height)
 	{
-		_origin_x = 0;
-		_origin_y = chunk_idx * -kChunkSizeY;
+
 	}
 
 	virtual void Tick(sf::Time delta_time) override {
 		PrintDebug("Background::Tick");
 	}
 
-	ChunkIdx _chunk_idx;
-	
-	float _origin_x, _origin_y;
+	float _origin_x, _origin_y, _end_y;
 };
 
 class StarsBackground : public Background
 {
 public:
-	StarsBackground(ChunkIdx chunk_idx) : Background(chunk_idx) {
+	StarsBackground(float origin_y, float height) 
+		: Background(origin_y, height) 
+	{
 		Generate();
 	}
 
