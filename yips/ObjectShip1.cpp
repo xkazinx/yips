@@ -45,10 +45,12 @@ void ObjectShip1::Render(sf::RenderTarget& wnd, sf::Time delta_time)
 	{
 		_ship_sprite->Move(velocity * delta_time.asSeconds(), 0.f);
 	}
-	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
 		_ship_sprite->Move(-velocity * delta_time.asSeconds(), 0.f);
 	}
+
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
 		_ship_sprite->Move(0.f, -velocity * delta_time.asSeconds());

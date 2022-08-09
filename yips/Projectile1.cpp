@@ -20,7 +20,8 @@ void Projectile1::Render(sf::RenderTarget& wnd, sf::Time delta_time)
 void Projectile1::Tick(sf::Time delta_time)
 {
 	{
-		float velocity = 50.f + 50.f;
+		float bg_velocity = 50.f;
+		float velocity = bg_velocity + 700.f;
 		_shape.move(0.f, -velocity * delta_time.asSeconds());
 	}
 }
