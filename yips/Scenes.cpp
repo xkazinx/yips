@@ -3,11 +3,12 @@
 #include "StartScene.h"
 #include "ScenarioScene.h"
 #include "ScenarioEditor.h"
-#include "Obstacle1.h"
+#include "BallObstacle.h"
 #include "Background.h"
 #include "Scenario.h"
 #include "Chunk.h"
 #include "ObjectShip1.h"
+#include "Projectile.h"
 
 Scenes::Scenes()
 {

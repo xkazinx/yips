@@ -17,8 +17,16 @@ public:
 	template<typename T>
 	T Generate(T min, T max)
 	{
-		std::uniform_int_distribution<T> dist(min, max);
-		return dist(_rng);
+		if constexpr(std::is_floating_point_v<T>)
+		{
+			std::uniform_real_distribution<T> dist(min, max);
+			return dist(_rng);
+		}
+		else
+		{
+			std::uniform_int_distribution<T> dist(min, max);
+			return dist(_rng);
+		}
 		//return T(min + (rand() % max));
 	}
 };

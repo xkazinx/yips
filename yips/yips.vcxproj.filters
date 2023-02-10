@@ -64,7 +64,7 @@
     <ClCompile Include="ObjectShip1.cpp">
       <Filter>scene\object\ship</Filter>
     </ClCompile>
-    <ClCompile Include="Obstacle1.cpp">
+    <ClCompile Include="BallObstacle.cpp">
       <Filter>scene\object\obstacle</Filter>
     </ClCompile>
     <ClCompile Include="Time.cpp">
@@ -80,7 +80,12 @@
       <Filter>sprite</Filter>
     </ClCompile>
     <ClCompile Include="Chunk.cpp" />
-    <ClCompile Include="Projectile1.cpp" />
+    <ClCompile Include="BallProjectile.cpp" />
+    <ClCompile Include="Obstacle2.cpp">
+      <Filter>scene\object\obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="Obstacle.cpp" />
+    <ClCompile Include="Projectile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="app">
@@ -193,7 +198,7 @@
     <ClInclude Include="ObjectShip1.h">
       <Filter>scene\object\ship</Filter>
     </ClInclude>
-    <ClInclude Include="Obstacle1.h">
+    <ClInclude Include="BallObstacle.h">
       <Filter>scene\object\obstacle</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imconfig.h">
@@ -212,7 +217,12 @@
       <Filter>sprite</Filter>
     </ClInclude>
     <ClInclude Include="Chunk.h" />
-    <ClInclude Include="Projectile1.h" />
+    <ClInclude Include="BallProjectile.h" />
+    <ClInclude Include="Obstacle2.h">
+      <Filter>scene\object\obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="Obstacle.h" />
+    <ClInclude Include="Projectile.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="notes.txt">

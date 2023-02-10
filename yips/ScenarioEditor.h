@@ -1,7 +1,7 @@
 #pragma once
 #include "Scene.h"
 
-class Obstacle1;
+class BallObstacle;
 class Scenario;
 class ScenarioEditor : public Scene
 {
@@ -21,6 +21,6 @@ public:
 	bool _move_up = false;
 	bool _move_down = false;
 
-	unique_ptr<Obstacle1> _current_obstacle;
+	unique_ptr<BallObstacle> _current_obstacle;
 };
 

@@ -3,7 +3,7 @@
 #include "Sprite.h"
 #include "Chunk.h"
 #include "Scenario.h"
-#include "Projectile1.h"
+#include "BallProjectile.h"
 
 void Object::Tick(sf::Time delta_time)
 {

@@ -4,6 +4,7 @@
 #include "Random.h"
 #include "Scenario.h"
 #include "Chunk.h"
+#include "Projectile.h"
 
 void StarsBackground::Generate()
 {
@@ -12,7 +13,7 @@ void StarsBackground::Generate()
 	{
 		_vertex_positions.push_back({ 
 			(float)g_rand->Generate<int>(0, kChunkSizeX), 
-			(float)g_rand->Generate<int>(_end_y, _origin_y)
+			g_rand->Generate<float>(_end_y, _origin_y)
 		});
 
 		_vertex_shapes.push_back(sf::Vertex(

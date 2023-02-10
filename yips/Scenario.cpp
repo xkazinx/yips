@@ -3,8 +3,9 @@
 #include "Background.h"
 #include "Chunk.h"
 #include "App.h"
-#include "Obstacle1.h"
+#include "BallObstacle.h"
 #include "Chunk.h"
+#include "BallProjectile.h"
 
 Scenario * Scenario::Current = nullptr;
 
@@ -21,7 +22,7 @@ void Scenario::Initialize(uint end_y)
 	_view.move(0.f, -kChunkSizeY);
 	g_app->_wnd.setView(_view);
 
-	AddObject<StarsBackground>(make_unique<StarsBackground>(0.f, end_y));
+	AddObject(make_unique<StarsBackground>(0.f, end_y));
 }
 
 void Scenario::Tick(sf::Time delta_time)

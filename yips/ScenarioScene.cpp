@@ -4,9 +4,9 @@
 #include "ObjectShip1.h"
 #include "Scenario.h"
 #include "Chunk.h"
-#include "Projectile1.h"
+#include "BallProjectile.h"
 #include "Sprite.h"
-#include "Obstacle1.h"
+#include "BallObstacle.h"
 #include "Random.h"
 
 ScenarioScene::ScenarioScene()
@@ -15,7 +15,7 @@ ScenarioScene::ScenarioScene()
 
    _scenario = make_unique<Scenario>(kChunkSizeY * 15);
 
-   _scenario->AddObject(make_unique<Obstacle1>(kChunkSizeX / 2, -(kChunkSizeY / 2)));
+   _scenario->AddObject<Obstacle>(make_unique<BallObstacle>(Vector2f{ kChunkSizeX / 2, -(kChunkSizeY / 2 )}));
 }
 
 bool ScenarioScene::HandleEvents(sf::Event& event)
@@ -29,18 +29,27 @@ bool ScenarioScene::HandleEvents(sf::Event& event)
       {
          float scale = 0.15f;
          float proj_radius = 10.f;
-         _scenario->_projectiles.push_back(make_unique<Projectile1>(
+         _scenario->_projectiles.push_back(make_unique<BallProjectile>(Vector2f
+            {
             _ship->_ship_sprite->_spr.getPosition().x + ((_ship->_ship_sprite->_spr.getTexture()->getSize().x * scale) / 2) - proj_radius,
-            _ship->_ship_sprite->_spr.getPosition().y
+            _ship->_ship_sprite->_spr.getPosition().y 
+            }
          ));
          return true;
       }
 
       case sf::Keyboard::O:
-         _scenario->AddObject(make_unique<Obstacle1>(
+         auto obs = _scenario->AddObject<BallObstacle>(make_unique<BallObstacle>(Vector2f
+            {
             (float)g_rand->Generate<u16>(0u, kChunkSizeX), 
-            _scenario->_view.getCenter().y - kChunkSizeY / 2)
-         );
+            _scenario->_view.getCenter().y - kChunkSizeY / 2
+            }
+         ));
+         
+         obs->_velocity_x = 10.f;
+         obs->_velocity_y = 0.f;//(float)g_rand->Generate<u16>(0.f, 1.f);
+         obs->_move_type = MoveType::Wave;
+
          break;
       }
       break;

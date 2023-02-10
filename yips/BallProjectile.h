@@ -1,10 +1,10 @@
 #pragma once
-#include "Object.h"
+#include "Projectile.h"
 
-class Projectile1 : public Object
+class BallProjectile : public Projectile
 {
 public:
-	Projectile1(float origin_x, float origin_y);
+	BallProjectile(Vector2f origin);
 
 	bool HandleEvents(sf::Event & event) { return false; }
 	void Render(sf::RenderTarget & wnd, sf::Time delta_time) override;

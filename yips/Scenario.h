@@ -3,6 +3,7 @@
 
 class Chunk;
 class Background;
+class Projectile;
 
 class Scenario : public Object
 {
@@ -51,7 +52,7 @@ public:
 	}
 
 public:
-	vector<unique_ptr<Object>> _projectiles;
+	vector<unique_ptr<Projectile>> _projectiles;
 
 public:
 	vector<Background*> _background_layers;

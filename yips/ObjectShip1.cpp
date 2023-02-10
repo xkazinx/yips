@@ -36,7 +36,7 @@ void ObjectShip1::Render(sf::RenderTarget& wnd, sf::Time delta_time)
 
 	Object::Render(wnd, delta_time);
 
-	float velocity = 150.f;
+	float velocity = 250.f;
 
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
 		velocity *= 2.f;

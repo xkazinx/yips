@@ -1,22 +1,22 @@
 #include "pch.h"
 #include "ScenarioEditor.h"
-#include "Obstacle1.h"
+#include "BallObstacle.h"
 #include "Scenario.h"
 #include "Background.h"
 #include "Chunk.h"
 #include "App.h"
+#include "BallProjectile.h"
 
 ScenarioEditor::ScenarioEditor()
 {
 	ShiftObstacle(true);
-
 }
 
 void ScenarioEditor::ShiftObstacle(bool next)
 {
 	array<sf::Color, 2> kColors = { sf::Color::White, sf::Color::Blue };
 	static u8 sIdx = 0;
-	_current_obstacle = make_unique<Obstacle1>(50.f, 50.f);
+	_current_obstacle = make_unique<BallObstacle>(Vector2f{ 50.f, 50.f });
 	_current_obstacle->_color = kColors[sIdx++];
 	if (sIdx >= kColors.size())
 		sIdx = 0;

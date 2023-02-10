@@ -36,32 +36,32 @@ namespace Log
 	using Type = LogType;
 
 	template<typename ... Args>
-	void Debug(Args && ...args)
+	void Debug(std::_Fmt_string<Args...> fs, Args && ...args)
 	{
-		ConsoleOut<Type::Debug>(format(forward<Args>(args)...).c_str());
+		ConsoleOut<Type::Debug>(std::vformat(fs._Str, std::make_format_args(args...)).c_str());
 	}
 
 	template<typename ... Args>
-	void Error(Args && ...args)
+	void Error(std::_Fmt_string<Args...> fs, Args && ...args)
 	{
-		ConsoleOut<Type::Error>(format(forward<Args>(args)...).c_str());
+		ConsoleOut<Type::Error>(std::vformat(fs._Str, std::make_format_args(args...)).c_str());
 	}
 }
 
 template<typename ... Args>
-void Print(Args && ...args)
+void Print(std::_Fmt_string<Args...> fs, Args && ...args)
 {
-	ConsoleOut<LogType::Out>(format(forward<Args>(args)...).c_str());
+	ConsoleOut<LogType::Out>(std::vformat(fs._Str, std::make_format_args(args...)).c_str());
 }
 
 template<typename ... Args>
-void PrintDebug(Args && ...args)
+void PrintDebug(std::_Fmt_string<Args...> fs, Args && ...args)
 {
-	ConsoleOut<LogType::Out>(format(forward<Args>(args)...).c_str());
+	ConsoleOut<LogType::Out>(std::vformat(fs._Str, std::make_format_args(args...)).c_str());
 }
 
 template<typename ... Args>
-void PrintError(Args && ...args)
+void PrintError(std::_Fmt_string<Args...> fs, Args && ...args)
 {
-	ConsoleOut<LogType::Out>(format(forward<Args>(args)...).c_str());
+	ConsoleOut<LogType::Out>(std::vformat(fs._Str, std::make_format_args(args...)).c_str());
 }

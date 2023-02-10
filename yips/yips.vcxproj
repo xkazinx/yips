@@ -175,12 +175,15 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="Log.cpp" />
-    <ClCompile Include="Projectile1.cpp" />
+    <ClCompile Include="Obstacle.cpp" />
+    <ClCompile Include="Obstacle2.cpp" />
+    <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="BallProjectile.cpp" />
     <ClCompile Include="Scenario.cpp" />
     <ClCompile Include="ScenarioEditor.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectShip1.cpp" />
-    <ClCompile Include="Obstacle1.cpp" />
+    <ClCompile Include="BallObstacle.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pch.h</PrecompiledHeaderFile>
@@ -217,12 +220,15 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="magic_enum.h" />
-    <ClInclude Include="Projectile1.h" />
+    <ClInclude Include="Obstacle.h" />
+    <ClInclude Include="Obstacle2.h" />
+    <ClInclude Include="Projectile.h" />
+    <ClInclude Include="BallProjectile.h" />
     <ClInclude Include="Scenario.h" />
     <ClInclude Include="ScenarioEditor.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectShip1.h" />
-    <ClInclude Include="Obstacle1.h" />
+    <ClInclude Include="BallObstacle.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="rang.hpp" />

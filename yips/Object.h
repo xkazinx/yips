@@ -2,24 +2,29 @@
 
 class Object
 {
-public: 
-	Object() : _id(ObjectID::None) {}
-	Object(ObjectID id) : _id(id) {
+private:
+	using ID = ObjectID;
+
+public:
+	Object() : _id(ID::None) {}
+	Object(ID id) : _id(id) {
 		PrintDebug("Object::Object({})", enum_name(_id));
 	}
 
+	// For projectile
+	Object(ID id, Vector2f origin) : Object(id) {
+		SetPosition(origin.x, origin.y);
+	}
+
+protected:
 	virtual bool HandleEvents(sf::Event & event) { return false; }
 	virtual void Render(sf::RenderTarget & wnd, sf::Time delta_time);
 	virtual void Tick(sf::Time delta_time);
 
+public:
 	virtual void Move(float x, float y);
 	virtual Vector2f GetPosition();
 	virtual void SetPosition(float x, float y);
-	virtual void SetInitialPosition(float x, float y)
-	{
-		_initial_pos = { x, y };
-		PrintDebug("SetInitialPosition({}, {})", x, y);
-	}
 
 	bool IsCollision(const Object * object) const
 	{
@@ -35,7 +40,7 @@ public:
 	}
 
 	template<typename T = Object>
-	T * AddObject(unique_ptr<Object> && object)
+	T * AddObject(unique_ptr<T> && object)
 	{
 		_objects.emplace_back(std::move(object));
 		return (T*)_objects.back().get();

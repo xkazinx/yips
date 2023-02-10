@@ -40,11 +40,16 @@ namespace Global
 		None = u8(-1)
 	};
 
+	enum class ProjectileID
+	{
+		Ball,
+	};
+
 	using ChunkIdx = u16;
 
 	inline ChunkIdx CalcChunkIdx(float y)
 	{
-		return floor(abs(y / kChunkSizeY));
+		return static_cast<ChunkIdx>(floor(abs(y / kChunkSizeY)));
 	}
 
 	inline Json LoadJson(string file_name)
@@ -54,7 +59,7 @@ namespace Global
 		std::ifstream in(kDataFolder + file_name);
 		if(!in.is_open())
 		{
-			PrintError("Couldn't load file {}", file_name);
+			//PrintError("Couldn't load file {}", file_name);
 			return {};
 		}
 

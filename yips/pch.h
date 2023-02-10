@@ -27,6 +27,8 @@ using i8 = signed short;
 using u8 = unsigned short;
 using i16 = signed short;
 using u16 = unsigned short;
+using i32 = signed long;
+using u32 = unsigned long;
 using uint = unsigned int;
 
 #include <string>
