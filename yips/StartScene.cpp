@@ -31,7 +31,7 @@ bool StartScene::HandleEvents(sf::Event & event)
 		{
 			g_scene->Set(SceneID::Scenario);
 		}
-		else if (event.key.code == sf::Keyboard::M)
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && event.key.code == sf::Keyboard::E)
 		{
 			g_scene->Set(SceneID::ScenarioEditor);
 		}

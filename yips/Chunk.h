@@ -13,6 +13,5 @@ public:
 	ChunkIdx _idx;
 
 	float _origin_x, _origin_y;
-
 };
 

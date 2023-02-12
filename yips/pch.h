@@ -30,6 +30,7 @@ using u16 = unsigned short;
 using i32 = signed long;
 using u32 = unsigned long;
 using uint = unsigned int;
+using szt = std::size_t;
 
 #include <string>
 using std::string;
@@ -69,5 +70,10 @@ using Json = nlohmann::json;
 
 #include <string_view>
 using namespace std::string_literals;
+
+#include <ranges>
+namespace ranges = std::views;
+
+#include "Misc.h"
 
 #include "Global.h"

@@ -12,14 +12,9 @@ ScenarioEditor::ScenarioEditor()
 	ShiftObstacle(true);
 }
 
-void ScenarioEditor::ShiftObstacle(bool next)
+void ScenarioEditor::ShiftObstacle([[maybe_unused]] bool next)
 {
-	array<sf::Color, 2> kColors = { sf::Color::White, sf::Color::Blue };
-	static u8 sIdx = 0;
 	_current_obstacle = make_unique<BallObstacle>(Vector2f{ 50.f, 50.f });
-	_current_obstacle->_color = kColors[sIdx++];
-	if (sIdx >= kColors.size())
-		sIdx = 0;
 }
 
 bool ScenarioEditor::HandleEvents(sf::Event& event)
@@ -35,6 +30,10 @@ bool ScenarioEditor::HandleEvents(sf::Event& event)
 
 		case sf::Keyboard::Down:
 			_move_down = false;
+			break;
+
+		case sf::Keyboard::F1:
+			_top_menu_opened = !_top_menu_opened;
 			break;
 		}
 		break;
@@ -61,25 +60,28 @@ bool ScenarioEditor::HandleEvents(sf::Event& event)
 		break;
 
 	case sf::Event::EventType::MouseButtonPressed:
-		/*if(event.mouseButton.button == sf::Mouse::Left)
+		if(event.mouseButton.button == sf::Mouse::Left)
 		{
 			if(!_scenario)
 				return false;
 
-			float x = sf::Mouse::getPosition(g_app->_wnd).x; 
-			float y = sf::Mouse::getPosition(g_app->_wnd).y;
+			auto mp = sf::Mouse::getPosition(g_app->_wnd);
 
-			auto chunk_idx = (kChunkSizeY + _scenario->_camera_y - y) / kChunkSizeY;
+			// auto chunk_idx = CalcChunkIdx(y);
+			auto chunk_idx = (kChunkSizeY + _scenario->_camera_y - mp.y) / kChunkSizeY;
 			
-			auto obj = _scenario->_chunks[floor(chunk_idx)]->AddObject(make_unique<Obstacle1>());
+			//y = kChunkSizeY - ((chunk_idx * kChunkSizeY) - (kChunkSizeY * floor(chunk_idx)));
+
+			PrintDebug("Clicked on chunk_idx({}) _scenario->_camera_y({}), event.mouseButton.y({}) chunk_pos_y({}) x({}) y({})", 
+				floor(chunk_idx), _scenario->_camera_y, event.mouseButton.y, mp.y, mp.x, mp.y);
 			
-			y = kChunkSizeY - ((chunk_idx * kChunkSizeY) - (kChunkSizeY * floor(chunk_idx)));
-			
-			PrintDebug("Clicked on chunk_idx({}) _scenario->_camera_y({}), event.mouseButton.y({}) chunk_pos_y({})", 
-				floor(chunk_idx), _scenario->_camera_y, event.mouseButton.y, y);
-			
-			obj->SetInitialPosition(x, y);
-		}*/
+			auto mp2 = g_app->_wnd.mapPixelToCoords(sf::Mouse::getPosition(g_app->_wnd));
+			auto obj = _scenario->_chunks[floor(chunk_idx)]->AddObject(make_unique<BallObstacle>(Vector2f{ (float)mp2.x, (float)mp2.y }));
+
+			mp2.y += kChunkSizeY;
+			// Deduce final coord to place at
+			obj->_initial_pos = { (float)mp2.x, (float)mp2.y };
+		}
 		break;
 	}
 	return false;
@@ -89,39 +91,127 @@ void ScenarioEditor::Render(sf::RenderWindow & wnd, sf::Time delta_time)
 {
 	if(_scenario)
 		_scenario->Render(wnd, delta_time);
+	
+	auto mpos = sf::Mouse::getPosition(g_app->_wnd);
+	_current_obstacle->SetPosition(mpos.x, mpos.y);
+	_current_obstacle->Render(wnd, delta_time);
 
-
-	auto pos = sf::Mouse::getPosition(wnd);
-	_current_obstacle->SetPosition(pos.x, pos.y);
-	//_current_obstacle->Render(wnd, delta_time);
-
-
-	ImGui::Begin("Map editor");
+	/**
+	 * UI
+	 */
+	if(_top_menu_opened)
 	{
-		static char buffer_chunks[64];
-		ImGui::InputText("Map chunks", buffer_chunks, IM_ARRAYSIZE(buffer_chunks));
-		
-		if(ImGui::Button("Create Scenario"))
+		if (ImGui::MenuItem("New")) 
+		{	
+			ImGui::OpenPopup("NewScenarioModal");
+		}
+		if (ImGui::MenuItem("Open", "Ctrl+O")) 
 		{
-			_scenario = make_unique<Scenario>((ChunkIdx)atoi(buffer_chunks));
-			Print("Scenario created with {} chunks", _scenario->_chunks.size());
+			// read files from "scenario" folder
+			_scenario_names = Misc::FetchFileNamesFromDirectory(kDataFolder + "scenario\\"s);
+			//_scenario_names.push_back("1_name");
+			//_scenario_names.push_back("2_name");
+			//_scenario_names.push_back("3_name");
+
+			ImGui::OpenPopup("OpenScenarioModal");
 		}
 
-		static char buffer_name[64];
-		ImGui::InputText("Map name", buffer_name, IM_ARRAYSIZE(buffer_name));
-
-		if(ImGui::Button("Load Scenario"))
+		if (ImGui::MenuItem("Save", "Ctrl+S")) 
 		{
-			LoadScenario(buffer_name);
+			if(!_scenario)
+			{
+				Log::Error("There's no scenario to save yet!");
+			}
+			else
+			{
+				if(_scenario->_name.empty())
+				{
+					ImGui::OpenPopup("SaveScenarioModal");
+				}
+				else
+				{
+					SaveScenario(_scenario->_name);
+				}
+			}
 		}
 
-		ImGui::SameLine();
-		if(ImGui::Button("Save Scenario"))
+		if (ImGui::MenuItem("Save As..")) 
 		{
-			SaveScenario(buffer_name);
+			if(!_scenario)
+			{
+				Log::Error("There's no scenario to save yet!");
+			}
+			else
+			{
+				if(!_scenario->_name.empty())
+				{
+					strcpy_s(_new_scenario_name, _scenario->_name.c_str());
+				}
+
+				ImGui::OpenPopup("SaveScenarioModal");
+			}
 		}
 	}
-	ImGui::End();
+
+	if (ImGui::BeginPopupModal("NewScenarioModal", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		static char sNewScenarioChunksCount[3] = { "32" };
+
+		ImGui::InputText("Chunks", sNewScenarioChunksCount, IM_ARRAYSIZE(sNewScenarioChunksCount));
+
+		if (ImGui::Button("Create Scenario"))
+		{
+			// check if there are existent scenarios with this name on save
+			_scenario = make_unique<Scenario>((ChunkIdx)atoi(sNewScenarioChunksCount));
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+
+	if (ImGui::BeginPopupModal("OpenScenarioModal", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		ImGui::ListBoxHeader("Scenarios");
+		for (szt i = 0u; i < _scenario_names.size(); ++i)
+		{
+			string& item_name = _scenario_names[i];
+			if (ImGui::Selectable(item_name.c_str(), false))
+			{
+				ImGui::CloseCurrentPopup();
+
+				LoadScenario(item_name.c_str());
+			}
+		}
+		ImGui::ListBoxFooter();
+
+		if (ImGui::Button("Cancel"))
+		{
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+
+	if (ImGui::BeginPopupModal("SaveScenarioModal", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		ImGui::InputText("Scenario name", _new_scenario_name, IM_ARRAYSIZE(_new_scenario_name));
+
+		if (ImGui::Button("Save Scenario"))
+		{
+			_scenario_names = Misc::FetchFileNamesFromDirectory(kDataFolder + "scenario"s);
+			if(std::ranges::find(_scenario_names, _new_scenario_name) == _scenario_names.end())
+			{
+				SaveScenario(_new_scenario_name);
+				ImGui::CloseCurrentPopup();
+			}
+			else
+			{
+				Log::Debug("The scenario {} already exists! Try another...", string(_new_scenario_name));
+			}
+		}
+
+		ImGui::EndPopup();
+	}
 }
 
 void ScenarioEditor::Tick(sf::Time delta_time)
@@ -159,15 +249,15 @@ void ScenarioEditor::SaveScenario(string file_name)
 	std::filesystem::path path(file_name);
 	
 	json["scenario_name"] = path.filename().string();
-	json["chunk_cnt"] = _scenario->_chunks.size();
+	json["chunk_cnt"] = _scenario->_chunk_cnt;
 
 	auto & jchunks = json["chunks"];
 
 	size_t chunk_idx = 0;
 	for(auto & chunk : _scenario->_chunks)
 	{
-		auto & jchunk = jchunks[chunk_idx];
-		jchunk["idx"] = chunk_idx;
+		auto & jchunk = jchunks[chunk->_idx];
+		jchunk["idx"] = chunk->_idx;
 		
 		PrintDebug("ChunkIdx({}) ObjectsCount({})", chunk_idx++, chunk->_objects.size());
 
@@ -183,9 +273,23 @@ void ScenarioEditor::SaveScenario(string file_name)
 			}
 
 			auto & jobject = jchunk["objects"][object_idx++];
-			jobject.emplace("x", object->_initial_pos.x);
-			jobject.emplace("y", object->_initial_pos.y);
+			if(object->_initial_pos.x != -1.f && object->_initial_pos.y != -1.f)
+			{
+				jobject.emplace("x", object->_initial_pos.x);
+				jobject.emplace("y", object->_initial_pos.y);
+			}
 			jobject.emplace("type", enum_name(object->_id));
+			switch(object->_id)
+			{
+			case ObjectID::Obstacle:
+			{
+				auto * obstacle = dynamic_cast<Obstacle*>(object.get());
+				assert(obstacle);
+
+				jobject.emplace("obstacle_type", enum_name(obstacle->_type));
+				break;
+			}
+			}
 		}
 	}
 

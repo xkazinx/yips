@@ -49,7 +49,7 @@ public:
 	vector<unique_ptr<Object>> _objects;
 
 	ObjectID _id;
-	Vector2f _pos, _initial_pos;
+	Vector2f _pos, _initial_pos = {-1.f, -1.f};
 
 private:
 	bool _expired = false;

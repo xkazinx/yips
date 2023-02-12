@@ -22,5 +22,11 @@ public:
 	bool _move_down = false;
 
 	unique_ptr<BallObstacle> _current_obstacle;
+
+	bool _top_menu_opened = true;
+	vector<string> _scenario_names;
+
+	// #move
+	char _new_scenario_name[scenario::kNameSize] = {};
 };
 

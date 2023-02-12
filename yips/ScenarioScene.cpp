@@ -13,7 +13,8 @@ ScenarioScene::ScenarioScene()
 {
    _ship = make_unique<ObjectShip1>();
 
-   _scenario = make_unique<Scenario>(kChunkSizeY * 15);
+   constexpr auto kChunkCount = 16;
+   _scenario = make_unique<Scenario>(kChunkCount);
 
    _scenario->AddObject<Obstacle>(make_unique<BallObstacle>(Vector2f{ kChunkSizeX / 2, -(kChunkSizeY / 2 )}));
 }

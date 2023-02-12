@@ -4,6 +4,8 @@
 class BallObstacle : public Obstacle
 {
 public:
+	static constexpr auto kType = ObstacleType::Ball;
+
 	BallObstacle(Vector2f origin);
 
 	void Render(sf::RenderTarget & wnd, sf::Time delta_time);

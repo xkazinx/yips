@@ -45,6 +45,11 @@ namespace Global
 		Ball,
 	};
 
+	enum class ObstacleType
+	{
+		Ball,
+	};
+
 	using ChunkIdx = u16;
 
 	inline ChunkIdx CalcChunkIdx(float y)
@@ -66,6 +71,11 @@ namespace Global
 		in >> json;
 		return json;
 	}
+}
+
+namespace scenario
+{
+	static constexpr auto kNameSize = 64u;
 }
 
 using namespace Global;

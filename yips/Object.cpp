@@ -11,6 +11,7 @@ void Object::Tick(sf::Time delta_time)
 	{
 		switch(object->_id)
 		{
+		case ID::None:
 		default:
 			object->Tick(delta_time);
 			break;
@@ -28,6 +29,7 @@ void Object::Render(sf::RenderTarget& wnd, sf::Time delta_time)
 			wnd.draw(((Sprite*)(object.get()))->_spr);
 			break;
 
+		case ObjectID::Obstacle:
 		case ObjectID::Object:
 		default:
 			object->Render(wnd, delta_time);

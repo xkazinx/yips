@@ -13,12 +13,13 @@ class Obstacle : public Object
 public:
 	friend Object;
 
-	Obstacle(ObjectID object_id);
-	Obstacle(ObjectID object_id, Vector2f origin);
+	Obstacle(ObstacleType type);
+	Obstacle(ObstacleType type, Vector2f origin);
 
 	virtual void Render(sf::RenderTarget& wnd, sf::Time delta_time);
 	virtual void Tick(sf::Time delta_time);
 
+	ObstacleType _type;
 	/*
 	virtual void SetPosition(float x, float y)
 	{

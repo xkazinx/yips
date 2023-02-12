@@ -9,11 +9,11 @@ class Scenario : public Object
 {
 public:
 	static Scenario * Current;
+	static constexpr auto kCount = 32u;
 
-	Scenario(uint end_y);
+	Scenario(ChunkIdx chunk_cnt);
 	Scenario(const Json & json) { Load(json); }
 	void Load(const Json & json);
-	void Initialize(uint end_y);
 
 	void Render(sf::RenderTarget & wnd, sf::Time delta_time) override;
 	void Tick(sf::Time delta_time) override;
@@ -31,10 +31,12 @@ public:
 	}
 	
 public:
+	ChunkIdx _chunk_cnt;
+	
 	void UpdateCurrentChunkIdx();
 	ChunkIdx _current_chunk;
 
-	string _file_name;
+	string _name;
 
 	vector<unique_ptr<Chunk>> _chunks;
 

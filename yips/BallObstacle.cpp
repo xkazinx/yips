@@ -1,19 +1,20 @@
 #include "pch.h"
 #include "BallObstacle.h"
 
-BallObstacle::BallObstacle(Vector2f origin) : Obstacle(ObjectID::Obstacle, origin)
+BallObstacle::BallObstacle(Vector2f origin)
+	: Obstacle(kType, origin)
 {
 	_shape.setRadius(30.f);
 	_shape.setFillColor(sf::Color(25, 25, 25));
 	_color = sf::Color::White;
 
-
+	SetPosition(origin.x, origin.y);
 }
 
 void BallObstacle::Render(sf::RenderTarget & wnd, sf::Time delta_time)
 {
 	wnd.draw(_shape);
-	
+	Log::Debug("Rendering shape at {} {}", _shape.getPosition().x, _shape.getPosition().y);
 	Obstacle::Render(wnd, delta_time);
 }
 

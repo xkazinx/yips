@@ -7,6 +7,7 @@ BallProjectile::BallProjectile(Vector2f origin)
 	_shape.setRadius(10.f);
 	_shape.setFillColor(sf::Color::Green);
 
+	SetPosition(origin.x, origin.y);
 	// SetPosition could stay here as well since it could vary depending on the shape size
 }
 

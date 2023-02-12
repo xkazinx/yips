@@ -1,10 +1,11 @@
 #include "pch.h"
 #include "Obstacle.h"
 
-Obstacle::Obstacle(ObjectID object_id) : Object(object_id) {}
+Obstacle::Obstacle(ObstacleType type)
+	: Object(ObjectID::Obstacle), _type(type) {}
 
-Obstacle::Obstacle(ObjectID object_id, Vector2f origin)
-	: Object(object_id)
+Obstacle::Obstacle(ObstacleType type, Vector2f origin)
+	: Obstacle(type)
 {
 	SetPosition(origin.x, origin.y);
 }

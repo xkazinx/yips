@@ -9,12 +9,8 @@
 
 Scenario * Scenario::Current = nullptr;
 
-Scenario::Scenario(uint end_y)
-{
-	Initialize(end_y);
-}
-
-void Scenario::Initialize(uint end_y)
+Scenario::Scenario(ChunkIdx chunk_cnt)
+	: _chunk_cnt(chunk_cnt)
 {
 	Current = this;
 
@@ -22,11 +18,27 @@ void Scenario::Initialize(uint end_y)
 	_view.move(0.f, -kChunkSizeY);
 	g_app->_wnd.setView(_view);
 
-	AddObject(make_unique<StarsBackground>(0.f, end_y));
+	_chunks.reserve(chunk_cnt);
+	for(szt i = 0u; i < chunk_cnt; ++i)
+	{
+		_chunks.push_back(make_unique<Chunk>(i));
+	}
+	
+	AddObject(make_unique<StarsBackground>(0.f, kChunkSizeY * chunk_cnt));
 }
 
 void Scenario::Tick(sf::Time delta_time)
 {
+	// TODO: create identifier
+	bool is_scenario_editor = true;
+	if(!is_scenario_editor)
+	{
+		for(auto & chunk : _chunks)
+		{
+			chunk->Tick(delta_time);
+		}
+	}
+
 	for(auto & projectile : _projectiles)
 	{
 		projectile->Tick(delta_time);
@@ -83,9 +95,16 @@ void Scenario::Render(sf::RenderTarget & wnd, sf::Time delta_time)
 
 	float y = kChunkSizeY - ((chunk_idx * kChunkSizeY) - (kChunkSizeY * floor(chunk_idx)));
 	g_app->RenderText(format("CurrentMouseChunkPosY: {}", y).c_str(), Vector2f(mp.x, mp.y + 80), 15);
+
+	//mp.y += kChunkSizeY;
 	g_app->RenderText(format("Mouse Pos: {} {}", mp.x, mp.y).c_str(), Vector2f(mp.x, mp.y + 95), 15);
 
 	Object::Render(wnd, delta_time);
+	
+	for(auto & chunk : _chunks)
+	{
+		chunk->Render(wnd, delta_time);
+	}
 	
 	//PrintDebug("Projectile.size: {}", _projectiles.size());
 	for(auto & projectile : _projectiles)
@@ -97,6 +116,8 @@ void Scenario::Render(sf::RenderTarget & wnd, sf::Time delta_time)
 void Scenario::Move(float x, float y)
 {
 	_view.move(x, y);	
+	_camera_x += x;
+	_camera_y += y;
 	UpdateCurrentChunkIdx();
 }
 
