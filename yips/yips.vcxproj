@@ -165,7 +165,6 @@
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Background.cpp" />
-    <ClCompile Include="Chunk.cpp" />
     <ClCompile Include="CommandArguments.cpp" />
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="imgui\imgui-SFML.cpp" />
@@ -208,7 +207,6 @@
   <ItemGroup>
     <ClInclude Include="App.h" />
     <ClInclude Include="Background.h" />
-    <ClInclude Include="Chunk.h" />
     <ClInclude Include="CommandArguments.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="imgui\imconfig.h" />

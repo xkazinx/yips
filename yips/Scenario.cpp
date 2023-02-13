@@ -1,10 +1,8 @@
 #include "pch.h"
 #include "Scenario.h"
 #include "Background.h"
-#include "Chunk.h"
 #include "App.h"
 #include "BallObstacle.h"
-#include "Chunk.h"
 #include "BallProjectile.h"
 
 Scenario * Scenario::Current = nullptr;
@@ -18,27 +16,11 @@ Scenario::Scenario(ChunkIdx chunk_cnt)
 	_view.move(0.f, -kChunkSizeY);
 	g_app->_wnd.setView(_view);
 
-	_chunks.reserve(chunk_cnt);
-	for(szt i = 0u; i < chunk_cnt; ++i)
-	{
-		_chunks.push_back(make_unique<Chunk>(i));
-	}
-	
 	AddObject(make_unique<StarsBackground>(0.f, kChunkSizeY * chunk_cnt));
 }
 
 void Scenario::Tick(sf::Time delta_time)
 {
-	// TODO: create identifier
-	bool is_scenario_editor = true;
-	if(!is_scenario_editor)
-	{
-		for(auto & chunk : _chunks)
-		{
-			chunk->Tick(delta_time);
-		}
-	}
-
 	for(auto & projectile : _projectiles)
 	{
 		projectile->Tick(delta_time);
@@ -101,10 +83,12 @@ void Scenario::Render(sf::RenderTarget & wnd, sf::Time delta_time)
 
 	Object::Render(wnd, delta_time);
 	
+	/*
 	for(auto & chunk : _chunks)
 	{
 		chunk->Render(wnd, delta_time);
 	}
+	*/
 	
 	//PrintDebug("Projectile.size: {}", _projectiles.size());
 	for(auto & projectile : _projectiles)
@@ -115,9 +99,11 @@ void Scenario::Render(sf::RenderTarget & wnd, sf::Time delta_time)
 
 void Scenario::Move(float x, float y)
 {
-	_view.move(x, y);	
+	_view.move(x, y);
+
 	_camera_x += x;
 	_camera_y += y;
+
 	UpdateCurrentChunkIdx();
 }
 
@@ -128,7 +114,7 @@ void Scenario::SetCameraPoint(float x, float y)
 
 void Scenario::UpdateCurrentChunkIdx()
 {
-	//_current_chunk = CalcChunkIdx(_camera_y);
+	_current_chunk = CalcChunkIdx(_camera_y);
 }
 
 void Scenario::Load(const Json & json)

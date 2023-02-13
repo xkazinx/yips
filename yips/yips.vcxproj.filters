@@ -79,7 +79,6 @@
     <ClCompile Include="Sprites.cpp">
       <Filter>sprite</Filter>
     </ClCompile>
-    <ClCompile Include="Chunk.cpp" />
     <ClCompile Include="BallProjectile.cpp" />
     <ClCompile Include="Obstacle2.cpp">
       <Filter>scene\object\obstacle</Filter>
@@ -219,7 +218,6 @@
     <ClInclude Include="Sprite.h">
       <Filter>sprite</Filter>
     </ClInclude>
-    <ClInclude Include="Chunk.h" />
     <ClInclude Include="BallProjectile.h" />
     <ClInclude Include="Obstacle2.h">
       <Filter>scene\object\obstacle</Filter>

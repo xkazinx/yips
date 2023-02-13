@@ -8,6 +8,7 @@ BallObstacle::BallObstacle(Vector2f origin)
 	_shape.setFillColor(sf::Color(25, 25, 25));
 	_color = sf::Color::White;
 
+	Print("Created BallObstacle at {}/{}", origin.x, origin.y);
 	SetPosition(origin.x, origin.y);
 }
 

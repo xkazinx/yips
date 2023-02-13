@@ -3,7 +3,6 @@
 #include "App.h"
 #include "Random.h"
 #include "Scenario.h"
-#include "Chunk.h"
 #include "Projectile.h"
 
 void StarsBackground::Generate()

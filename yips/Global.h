@@ -26,6 +26,8 @@ namespace Global
 		Start,
 		Scenario,
 		ScenarioEditor,
+
+		None = u8(-1)
 	};
 
 	enum class ObjectID

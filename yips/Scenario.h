@@ -38,8 +38,6 @@ public:
 
 	string _name;
 
-	vector<unique_ptr<Chunk>> _chunks;
-
 public:
 	sf::VertexArray _line;
 

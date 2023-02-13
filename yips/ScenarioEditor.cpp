@@ -3,11 +3,10 @@
 #include "BallObstacle.h"
 #include "Scenario.h"
 #include "Background.h"
-#include "Chunk.h"
 #include "App.h"
 #include "BallProjectile.h"
 
-ScenarioEditor::ScenarioEditor()
+ScenarioEditor::ScenarioEditor() : Scene(SceneID::ScenarioEditor)
 {
 	ShiftObstacle(true);
 }
@@ -76,7 +75,7 @@ bool ScenarioEditor::HandleEvents(sf::Event& event)
 				floor(chunk_idx), _scenario->_camera_y, event.mouseButton.y, mp.y, mp.x, mp.y);
 			
 			auto mp2 = g_app->_wnd.mapPixelToCoords(sf::Mouse::getPosition(g_app->_wnd));
-			auto obj = _scenario->_chunks[floor(chunk_idx)]->AddObject(make_unique<BallObstacle>(Vector2f{ (float)mp2.x, (float)mp2.y }));
+			auto obj = _scenario->AddObject(make_unique<BallObstacle>(Vector2f{ (float)mp2.x, (float)mp2.y }));
 
 			mp2.y += kChunkSizeY;
 			// Deduce final coord to place at
@@ -92,7 +91,7 @@ void ScenarioEditor::Render(sf::RenderWindow & wnd, sf::Time delta_time)
 	if(_scenario)
 		_scenario->Render(wnd, delta_time);
 	
-	auto mpos = sf::Mouse::getPosition(g_app->_wnd);
+	auto mpos = wnd.mapPixelToCoords(sf::Mouse::getPosition(g_app->_wnd));
 	_current_obstacle->SetPosition(mpos.x, mpos.y);
 	_current_obstacle->Render(wnd, delta_time);
 
@@ -216,8 +215,9 @@ void ScenarioEditor::Render(sf::RenderWindow & wnd, sf::Time delta_time)
 
 void ScenarioEditor::Tick(sf::Time delta_time)
 {
-	if(_scenario)
-		_scenario->Tick(delta_time);
+	// So that the obstacles don't move
+	//if(_scenario)
+		//_scenario->Tick(delta_time);
 
 	float velocity = 64.f;
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
@@ -249,10 +249,12 @@ void ScenarioEditor::SaveScenario(string file_name)
 	std::filesystem::path path(file_name);
 	
 	json["scenario_name"] = path.filename().string();
+
+	/*
 	json["chunk_cnt"] = _scenario->_chunk_cnt;
 
 	auto & jchunks = json["chunks"];
-
+	
 	size_t chunk_idx = 0;
 	for(auto & chunk : _scenario->_chunks)
 	{
@@ -292,6 +294,7 @@ void ScenarioEditor::SaveScenario(string file_name)
 			}
 		}
 	}
+	*/
 
 	out << json.dump(4);
 }

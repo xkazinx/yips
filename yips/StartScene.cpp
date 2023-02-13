@@ -3,7 +3,7 @@
 #include "App.h"
 #include "Scenes.h"
 
-StartScene::StartScene()
+StartScene::StartScene() : Scene(SceneID::Start)
 {
 	_title_texture.loadFromFile(kDataFolder + "game_title.png"s);
 

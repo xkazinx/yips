@@ -6,11 +6,10 @@
 #include "BallObstacle.h"
 #include "Background.h"
 #include "Scenario.h"
-#include "Chunk.h"
 #include "ObjectShip1.h"
 #include "Projectile.h"
 
-Scenes::Scenes()
+Scenes::Scenes() : Scene(SceneID::None)
 {
 	_ptr = make_unique<StartScene>();
 }

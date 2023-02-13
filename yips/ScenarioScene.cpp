@@ -3,13 +3,12 @@
 #include "Background.h"
 #include "ObjectShip1.h"
 #include "Scenario.h"
-#include "Chunk.h"
 #include "BallProjectile.h"
 #include "Sprite.h"
 #include "BallObstacle.h"
 #include "Random.h"
 
-ScenarioScene::ScenarioScene()
+ScenarioScene::ScenarioScene() : Scene(SceneID::Scenario)
 {
    _ship = make_unique<ObjectShip1>();
 
