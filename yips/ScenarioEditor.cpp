@@ -64,6 +64,14 @@ bool ScenarioEditor::HandleEvents(sf::Event& event)
 			if(!_scenario)
 				return false;
 
+			// TODO: Replace by something else
+			if (ImGui::IsPopupOpen("NewScenarioModal", ImGuiPopupFlags_AnyPopupId | ImGuiPopupFlags_AnyPopupLevel) ||
+				ImGui::IsPopupOpen("OpenScenarioModal", ImGuiPopupFlags_AnyPopupId | ImGuiPopupFlags_AnyPopupLevel) || 
+				ImGui::IsPopupOpen("SaveScenarioModal", ImGuiPopupFlags_AnyPopupId | ImGuiPopupFlags_AnyPopupLevel))
+			{
+				return false;
+			}
+
 			auto mp = sf::Mouse::getPosition(g_app->_wnd);
 
 			// auto chunk_idx = CalcChunkIdx(y);
@@ -252,6 +260,36 @@ void ScenarioEditor::SaveScenario(string file_name)
 	
 	json["scenario_name"] = path.filename().string();
 
+	// TODO: Replace by size?
+	json["chunk_cnt"] = _scenario->_chunk_cnt;
+
+	for(auto & object : _scenario->_objects)
+	{
+		if (object->_id != ObjectID::Obstacle)
+			continue;
+
+		auto & jobjects = json["objects"];
+		auto & jobject = json["object"];
+		if (object->_initial_pos.x != -1.f && object->_initial_pos.y != -1.f)
+		{
+			//jobjects.emplace("type", enum_name(object->_id));
+
+			jobject.emplace("x", object->_initial_pos.x);
+			jobject.emplace("y", object->_initial_pos.y);
+
+			switch (object->_id)
+			{
+			case ObjectID::Obstacle:
+			{
+				auto* obstacle = dynamic_cast<Obstacle*>(object.get());
+				assert(obstacle);
+
+				jobject.emplace("type", enum_name(obstacle->_type));
+				break;
+			}
+			}
+		}
+	}
 	/*
 	json["chunk_cnt"] = _scenario->_chunk_cnt;
 
@@ -303,5 +341,5 @@ void ScenarioEditor::SaveScenario(string file_name)
 
 void ScenarioEditor::LoadScenario(string file_name)
 {
-	_scenario = make_unique<Scenario>(LoadJson("scenario\\"s + file_name));
+	_scenario = make_unique<Scenario>(LoadJson(kDataFolder + "scenario\\"s + file_name));
 }

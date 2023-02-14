@@ -8,15 +8,21 @@
 Scenario * Scenario::Current = nullptr;
 
 Scenario::Scenario(ChunkIdx chunk_cnt)
-	: _chunk_cnt(chunk_cnt)
+{
+	Initialize(chunk_cnt);
+}
+
+void Scenario::Initialize(ChunkIdx chunk_cnt)
 {
 	Current = this;
+	
+	_chunk_cnt = chunk_cnt;
 
 	_view.reset({ 0.f, 0.f, kChunkSizeX, kChunkSizeY });
 	_view.move(0.f, -kChunkSizeY);
 	g_app->_wnd.setView(_view);
 
-	AddObject(make_unique<StarsBackground>(0.f, kChunkSizeY * chunk_cnt));
+	AddObject(make_unique<StarsBackground>(0.f, float(kChunkSizeY * chunk_cnt)));
 }
 
 void Scenario::Tick(sf::Time delta_time)
@@ -119,53 +125,32 @@ void Scenario::UpdateCurrentChunkIdx()
 
 void Scenario::Load(const Json & json)
 {
-	return;
-	/*
-	size_t chunk_cnt = json["chunk_cnt"];
-	Initialize(chunk_cnt);
+	_name = json["scenario_name"];
+	
+	Initialize(json["chunk_cnt"]);
 
-	_file_name = json["scenario_name"];
-
-	auto & jchunks = json["chunks"];
-
-	for(auto & jchunk : jchunks)
+	auto & jobjects = json["objects"];
+	for(auto & jobject : jobjects)
 	{
-		ChunkIdx chunk_idx = jchunk["idx"];
-		if(jchunk.find("objects") == jchunk.end())
-			continue;
-
-		auto & objects = jchunk["objects"];	
-		for(auto & object : objects)
+		// TODO: Read more than Obstacles in the future
+		//auto id = ObjectID::Obstacle;
 		{
-			auto type = object["type"].get<string>();
-			auto id = ObjectID::None;
+			//auto & type = jobject["type"];
+			continue;
+			//Log::Debug("Object type: {}", type);
+			/*for (auto name : enum_names<ObstacleType>())
 			{
-				size_t idx = 0;
-				for(auto name : enum_names<ObjectID>())
+				if (name == type)
 				{
-					if(name == type)
-						id = (ObjectID)idx;
+					if(type == enum_name(ObstacleType::Ball))
+					{
+						auto x = jobject[0]["x"].get<float>();
+						auto y = jobject[0]["y"].get<float>();
 
-					++idx;
+						_objects.push_back(make_unique<BallObstacle>(Vector2f{ x, y }));
+					}
 				}
-			}
-
-			if(id == ObjectID::None)
-			{
-				PrintError("Fetching wrong ObjectID for {}", _file_name);
-				continue;
-			}
-
-			auto x = object["x"].get<float>();
-			auto y = object["y"].get<float>();
-
-			switch(id)
-			{
-			case ObjectID::Obstacle:
-				auto obj = _chunks[chunk_idx]->AddObject(make_unique<Obstacle1>());
-				obj->SetInitialPosition(x, y);
-				break;
-			}
+			}*/
 		}
-	}*/
+	}
 }

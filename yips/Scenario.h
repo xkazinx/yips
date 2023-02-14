@@ -12,6 +12,8 @@ public:
 	static constexpr auto kCount = 32u;
 
 	Scenario(ChunkIdx chunk_cnt);
+	void Initialize(ChunkIdx chunk_cnt);
+
 	Scenario(const Json & json) { Load(json); }
 	void Load(const Json & json);
 

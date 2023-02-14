@@ -10,6 +10,9 @@ BallObstacle::BallObstacle(Vector2f origin)
 
 	Print("Created BallObstacle at {}/{}", origin.x, origin.y);
 	SetPosition(origin.x, origin.y);
+
+	// #todo Call this programatically for all objects?
+	_initial_pos = { origin.x, origin.y };
 }
 
 void BallObstacle::Render(sf::RenderTarget & wnd, sf::Time delta_time)
