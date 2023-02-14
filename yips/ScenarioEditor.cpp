@@ -89,11 +89,13 @@ bool ScenarioEditor::HandleEvents(sf::Event& event)
 void ScenarioEditor::Render(sf::RenderWindow & wnd, sf::Time delta_time)
 {
 	if(_scenario)
+	{
 		_scenario->Render(wnd, delta_time);
 	
-	auto mpos = wnd.mapPixelToCoords(sf::Mouse::getPosition(g_app->_wnd));
-	_current_obstacle->SetPosition(mpos.x, mpos.y);
-	_current_obstacle->Render(wnd, delta_time);
+		auto mpos = wnd.mapPixelToCoords(sf::Mouse::getPosition(g_app->_wnd));
+		_current_obstacle->SetPosition(mpos.x, mpos.y);
+		_current_obstacle->Render(wnd, delta_time);
+	}
 
 	/**
 	 * UI
