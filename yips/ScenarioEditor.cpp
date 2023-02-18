@@ -74,6 +74,12 @@ bool ScenarioEditor::HandleEvents(sf::Event& event)
 
 			auto mp = sf::Mouse::getPosition(g_app->_wnd);
 
+			if(_top_menu_rect.contains(mp))
+			{
+				Log::Debug("Top menu rect contains mouse!");
+				return false;
+			}
+
 			// auto chunk_idx = CalcChunkIdx(y);
 			auto chunk_idx = (kChunkSizeY + _scenario->_camera_y - mp.y) / kChunkSizeY;
 			
@@ -162,6 +168,11 @@ void ScenarioEditor::Render(sf::RenderWindow & wnd, sf::Time delta_time)
 				ImGui::OpenPopup("SaveScenarioModal");
 			}
 		}
+
+		_top_menu_rect = {
+			(int)ImGui::GetWindowPos().x, (int)ImGui::GetWindowPos().y,
+			(int)ImGui::GetWindowSize().x, (int)ImGui::GetWindowSize().y
+		};
 	}
 
 	if (ImGui::BeginPopupModal("NewScenarioModal", NULL, ImGuiWindowFlags_AlwaysAutoResize))

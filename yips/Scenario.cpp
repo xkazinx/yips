@@ -149,11 +149,8 @@ void Scenario::Load(const Json & json)
 						auto x = jobject.value("x", 0.f);
 						auto y = jobject.value("y", 0.f);
 
-						//x += kChunkSizeX / 2.f;
 						y -= kChunkSizeY;
-						auto final_pos = g_app->_wnd.mapCoordsToPixel({ x, y });
 
-						Log::Debug("Loaded object at {}/{} : {}/{}", x, y, final_pos.x, final_pos.y);
 						_objects.push_back(make_unique<BallObstacle>(Vector2f{ (float)x, (float)y }));
 					}
 				}

@@ -24,6 +24,7 @@ public:
 	unique_ptr<BallObstacle> _current_obstacle;
 
 	bool _top_menu_opened = true;
+	sf::Rect<int> _top_menu_rect;
 	vector<string> _scenario_names;
 
 	// #move
