@@ -129,28 +129,35 @@ void Scenario::Load(const Json & json)
 	
 	Initialize(json["chunk_cnt"]);
 
-	auto & jobjects = json["objects"];
-	for(auto & jobject : jobjects)
+	if (json.find("objects") != json.end())
 	{
-		// TODO: Read more than Obstacles in the future
-		//auto id = ObjectID::Obstacle;
+		for (auto& jobject : json.at("objects"))
 		{
-			//auto & type = jobject["type"];
-			continue;
-			//Log::Debug("Object type: {}", type);
-			/*for (auto name : enum_names<ObstacleType>())
-			{
-				if (name == type)
-				{
-					if(type == enum_name(ObstacleType::Ball))
-					{
-						auto x = jobject[0]["x"].get<float>();
-						auto y = jobject[0]["y"].get<float>();
+			// TODO: Read more than Obstacles in the future
+			//auto id = ObjectID::Obstacle;
 
-						_objects.push_back(make_unique<BallObstacle>(Vector2f{ x, y }));
+			auto type_name = jobject.at("type").get<string>();
+
+			for (auto obstacle_value : enum_values<ObstacleType>())
+			{
+				if (type_name == enum_name(obstacle_value))
+				{
+					ObstacleType type = obstacle_value;
+
+					if (type == ObstacleType::Ball)
+					{
+						auto x = jobject.value("x", 0.f);
+						auto y = jobject.value("y", 0.f);
+
+						//x += kChunkSizeX / 2.f;
+						y -= kChunkSizeY;
+						auto final_pos = g_app->_wnd.mapCoordsToPixel({ x, y });
+
+						Log::Debug("Loaded object at {}/{} : {}/{}", x, y, final_pos.x, final_pos.y);
+						_objects.push_back(make_unique<BallObstacle>(Vector2f{ (float)x, (float)y }));
 					}
 				}
-			}*/
+			}
 		}
 	}
 }

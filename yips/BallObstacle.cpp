@@ -12,13 +12,13 @@ BallObstacle::BallObstacle(Vector2f origin)
 	SetPosition(origin.x, origin.y);
 
 	// #todo Call this programatically for all objects?
-	_initial_pos = { origin.x, origin.y };
+	//_initial_pos = { origin.x, origin.y };
 }
 
 void BallObstacle::Render(sf::RenderTarget & wnd, sf::Time delta_time)
 {
 	wnd.draw(_shape);
-	Log::Debug("Rendering shape at {} {}", _shape.getPosition().x, _shape.getPosition().y);
+	//Log::Debug("Rendering shape at {} {}", _shape.getPosition().x, _shape.getPosition().y);
 	Obstacle::Render(wnd, delta_time);
 }
 

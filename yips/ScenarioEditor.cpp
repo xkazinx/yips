@@ -85,9 +85,11 @@ bool ScenarioEditor::HandleEvents(sf::Event& event)
 			auto mp2 = g_app->_wnd.mapPixelToCoords(sf::Mouse::getPosition(g_app->_wnd));
 			auto obj = _scenario->AddObject(make_unique<BallObstacle>(Vector2f{ (float)mp2.x, (float)mp2.y }));
 
-			mp2.y += kChunkSizeY;
+			Log::Debug("MouseButtonPressed: _scenario->_objects.size(): {}", _scenario->_objects.size());
+
+			//mp2.y += kChunkSizeY;
 			// Deduce final coord to place at
-			obj->_initial_pos = { (float)mp2.x, (float)mp2.y };
+			obj->_initial_pos = { (float)mp.x, (float)mp.y };
 		}
 		break;
 	}
@@ -263,19 +265,26 @@ void ScenarioEditor::SaveScenario(string file_name)
 	// TODO: Replace by size?
 	json["chunk_cnt"] = _scenario->_chunk_cnt;
 
-	for(auto & object : _scenario->_objects)
+	Log::Debug("Saving scenario with objects.size(): {}", _scenario->_objects.size());
+
+	json["objects"] = Json::array();
+
+	for (auto& object : _scenario->_objects)
 	{
 		if (object->_id != ObjectID::Obstacle)
 			continue;
 
-		auto & jobjects = json["objects"];
-		auto & jobject = json["object"];
+		auto& jobjects = json["objects"];
+
+		auto jobject = Json::object();
 		if (object->_initial_pos.x != -1.f && object->_initial_pos.y != -1.f)
 		{
 			//jobjects.emplace("type", enum_name(object->_id));
 
 			jobject.emplace("x", object->_initial_pos.x);
 			jobject.emplace("y", object->_initial_pos.y);
+
+			Log::Debug("Saved scenario object at {}/{}", object->_initial_pos.x, object->_initial_pos.y);
 
 			switch (object->_id)
 			{
@@ -288,6 +297,8 @@ void ScenarioEditor::SaveScenario(string file_name)
 				break;
 			}
 			}
+
+			jobjects.push_back(jobject);
 		}
 	}
 	/*
