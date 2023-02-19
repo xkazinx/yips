@@ -64,5 +64,10 @@ public:
 	{
 		_expired = true;
 	}
+
+	bool IsSelectable() const 
+	{
+		return _id == ObjectID::Obstacle;
+	}
 };
 

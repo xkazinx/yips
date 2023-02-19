@@ -80,22 +80,35 @@ bool ScenarioEditor::HandleEvents(sf::Event& event)
 				return false;
 			}
 
-			// auto chunk_idx = CalcChunkIdx(y);
-			auto chunk_idx = (kChunkSizeY + _scenario->_camera_y - mp.y) / kChunkSizeY;
+			if(_tool == ToolType::Position)
+			{
+				// auto chunk_idx = CalcChunkIdx(y);
+				auto chunk_idx = (kChunkSizeY + _scenario->_camera_y - mp.y) / kChunkSizeY;
 			
-			//y = kChunkSizeY - ((chunk_idx * kChunkSizeY) - (kChunkSizeY * floor(chunk_idx)));
+				//y = kChunkSizeY - ((chunk_idx * kChunkSizeY) - (kChunkSizeY * floor(chunk_idx)));
 
-			PrintDebug("Clicked on chunk_idx({}) _scenario->_camera_y({}), event.mouseButton.y({}) chunk_pos_y({}) x({}) y({})", 
-				floor(chunk_idx), _scenario->_camera_y, event.mouseButton.y, mp.y, mp.x, mp.y);
+				PrintDebug("Clicked on chunk_idx({}) _scenario->_camera_y({}), event.mouseButton.y({}) chunk_pos_y({}) x({}) y({})", 
+					floor(chunk_idx), _scenario->_camera_y, event.mouseButton.y, mp.y, mp.x, mp.y);
 			
-			auto mp2 = g_app->_wnd.mapPixelToCoords(sf::Mouse::getPosition(g_app->_wnd));
-			auto obj = _scenario->AddObject(make_unique<BallObstacle>(Vector2f{ (float)mp2.x, (float)mp2.y }));
+				auto mp2 = g_app->_wnd.mapPixelToCoords(sf::Mouse::getPosition(g_app->_wnd));
+				auto obj = _scenario->AddObject(make_unique<BallObstacle>(Vector2f{ (float)mp2.x, (float)mp2.y }));
 
-			Log::Debug("MouseButtonPressed: _scenario->_objects.size(): {}", _scenario->_objects.size());
+				Log::Debug("MouseButtonPressed: _scenario->_objects.size(): {}", _scenario->_objects.size());
 
-			//mp2.y += kChunkSizeY;
-			// Deduce final coord to place at
-			obj->_initial_pos = { (float)mp.x, (float)mp.y };
+				//mp2.y += kChunkSizeY;
+				// Deduce final coord to place at
+				obj->_initial_pos = { (float)mp.x, (float)mp.y };
+			}
+			else if(_tool == ToolType::Selection)
+			{
+				for(auto & object : _scenario->_objects)
+				{
+					if(!object->IsSelectable())
+						continue;
+
+					Log::Debug("Trying to select object...");
+				}
+			}
 		}
 		break;
 	}
@@ -109,8 +122,15 @@ void ScenarioEditor::Render(sf::RenderWindow & wnd, sf::Time delta_time)
 		_scenario->Render(wnd, delta_time);
 	
 		auto mpos = wnd.mapPixelToCoords(sf::Mouse::getPosition(g_app->_wnd));
-		_current_obstacle->SetPosition(mpos.x, mpos.y);
-		_current_obstacle->Render(wnd, delta_time);
+		if(_tool == ToolType::Position)
+		{
+			_current_obstacle->SetPosition(mpos.x, mpos.y);
+			_current_obstacle->Render(wnd, delta_time);
+		}
+		else if(_tool == ToolType::Selection)
+		{
+		
+		}
 	}
 
 	/**
@@ -167,6 +187,22 @@ void ScenarioEditor::Render(sf::RenderWindow & wnd, sf::Time delta_time)
 
 				ImGui::OpenPopup("SaveScenarioModal");
 			}
+		}
+
+		if (ImGui::TreeNode("Tools"))
+		{
+			for (auto tool : enum_values<ToolType>())
+			{
+				auto sv = enum_name(tool);
+				string data{ sv.data(), sv.size() };
+				//data = data.substr(0, 1);
+
+				if (ImGui::Selectable(data.c_str(), _tool == tool))
+				{
+					_tool = tool;
+				}
+			}
+			ImGui::TreePop();
 		}
 
 		_top_menu_rect = {

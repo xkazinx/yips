@@ -23,11 +23,24 @@ public:
 
 	unique_ptr<BallObstacle> _current_obstacle;
 
-	bool _top_menu_opened = true;
-	sf::Rect<int> _top_menu_rect;
 	vector<string> _scenario_names;
 
 	// #move
 	char _new_scenario_name[scenario::kNameSize] = {};
+
+	
+public: // Section: Top menu
+	bool _top_menu_opened = true;
+	sf::Rect<int> _top_menu_rect;
+
+	enum class ToolType
+	{
+		Position,
+		Selection,
+
+		Default = Position,
+	};
+
+	ToolType _tool = ToolType::Default;
 };
 
