@@ -36,6 +36,25 @@ void Object::Render(sf::RenderTarget& wnd, sf::Time delta_time)
 			break;
 		}
 	}
+
+	if (_selected)
+	{
+		static sf::RectangleShape sBounds;
+		sBounds.setFillColor(sf::Color::Transparent);
+		sBounds.setOutlineColor(sf::Color::Blue);
+		sBounds.setOutlineThickness(1.f);
+
+		auto rect = GetCollisionRect();
+		{
+			Log::Debug("collisionrect: {} {} {} {}",
+				rect.left, rect.top, rect.width, rect.height
+			);
+
+			sBounds.setPosition(rect.left, rect.top);
+			sBounds.setSize({ (float)rect.width, (float)rect.height });
+		}
+		wnd.draw(sBounds);
+	}
 }
 
 void Object::Move(float x, float y)

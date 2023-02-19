@@ -69,5 +69,7 @@ public:
 	{
 		return _id == ObjectID::Obstacle;
 	}
+
+	bool _selected = false;
 };
 

@@ -28,7 +28,6 @@ public:
 	// #move
 	char _new_scenario_name[scenario::kNameSize] = {};
 
-	
 public: // Section: Top menu
 	bool _top_menu_opened = true;
 	sf::Rect<int> _top_menu_rect;

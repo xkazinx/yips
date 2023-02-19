@@ -73,6 +73,7 @@ bool ScenarioEditor::HandleEvents(sf::Event& event)
 			}
 
 			auto mp = sf::Mouse::getPosition(g_app->_wnd);
+			auto mc = g_app->_wnd.mapPixelToCoords(sf::Mouse::getPosition(g_app->_wnd));
 
 			if(_top_menu_rect.contains(mp))
 			{
@@ -90,8 +91,7 @@ bool ScenarioEditor::HandleEvents(sf::Event& event)
 				PrintDebug("Clicked on chunk_idx({}) _scenario->_camera_y({}), event.mouseButton.y({}) chunk_pos_y({}) x({}) y({})", 
 					floor(chunk_idx), _scenario->_camera_y, event.mouseButton.y, mp.y, mp.x, mp.y);
 			
-				auto mp2 = g_app->_wnd.mapPixelToCoords(sf::Mouse::getPosition(g_app->_wnd));
-				auto obj = _scenario->AddObject(make_unique<BallObstacle>(Vector2f{ (float)mp2.x, (float)mp2.y }));
+				auto obj = _scenario->AddObject(make_unique<BallObstacle>(Vector2f{ (float)mc.x, (float)mc.y }));
 
 				Log::Debug("MouseButtonPressed: _scenario->_objects.size(): {}", _scenario->_objects.size());
 
@@ -106,7 +106,21 @@ bool ScenarioEditor::HandleEvents(sf::Event& event)
 					if(!object->IsSelectable())
 						continue;
 
-					Log::Debug("Trying to select object...");
+					auto rect = object->GetCollisionRect();
+					Log::Debug("rect: {} {} {} {}, mp: {} {}, mc: {} {}",
+						rect.left, rect.top, rect.width, rect.height,
+						mp.x, mp.y, 
+						mc.x, mc.y
+					);
+
+					//rect.width += rect.left;
+					//rect.height += rect.top;
+
+					if(rect.contains(mc))
+					{
+						Log::Debug("Selected!");
+						object->_selected = !object->_selected;
+					}
 				}
 			}
 		}
