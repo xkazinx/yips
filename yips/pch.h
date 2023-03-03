@@ -72,7 +72,10 @@ using Json = nlohmann::json;
 using namespace std::string_literals;
 
 #include <ranges>
-namespace ranges = std::views;
+namespace ranges = std::ranges;
+namespace views = std::ranges::views;
+
+#include <stack>
 
 #include "Misc.h"
 

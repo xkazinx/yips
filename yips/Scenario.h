@@ -11,6 +11,7 @@ public:
 	static Scenario * Current;
 	static constexpr auto kCount = 32u;
 
+	Scenario(Scenario && scenario);
 	Scenario(ChunkIdx chunk_cnt);
 	void Initialize(ChunkIdx chunk_cnt);
 

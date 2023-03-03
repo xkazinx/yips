@@ -7,6 +7,21 @@
 
 Scenario * Scenario::Current = nullptr;
 
+// From ScenarioEditor
+Scenario::Scenario(Scenario&& scenario)
+{
+	Current = this;
+	
+	_chunk_cnt = scenario._chunk_cnt;
+
+	_view.setCenter(0.f, 0.f);
+	_view.reset({ 0.f, 0.f, kChunkSizeX, kChunkSizeY });
+	_view.move(0.f, -kChunkSizeY);
+	g_app->_wnd.setView(_view);
+
+	_objects = std::move(scenario._objects);
+}
+
 Scenario::Scenario(ChunkIdx chunk_cnt)
 {
 	Initialize(chunk_cnt);

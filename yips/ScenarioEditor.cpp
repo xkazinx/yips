@@ -5,6 +5,8 @@
 #include "Background.h"
 #include "App.h"
 #include "BallProjectile.h"
+#include "Scenes.h"
+#include "ScenarioScene.h"
 
 ScenarioEditor::ScenarioEditor() : Scene(SceneID::ScenarioEditor)
 {
@@ -55,6 +57,11 @@ bool ScenarioEditor::HandleEvents(sf::Event& event)
 		case sf::Keyboard::Down:
 			_move_down = true;
 			break;
+
+		case sf::Keyboard::P:
+			if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+				PlayScenario();
+			break;
 		}
 		break;
 
@@ -98,6 +105,11 @@ bool ScenarioEditor::HandleEvents(sf::Event& event)
 				//mp2.y += kChunkSizeY;
 				// Deduce final coord to place at
 				obj->_initial_pos = { (float)mp.x, (float)mp.y };
+
+				{
+					_remake_stack._list.push(EditorAction{ EditorActionID::AddObject });
+					auto last_inserted_element = _remake_stack._list.top();
+				}
 			}
 			else if(_tool == ToolType::Selection)
 			{
@@ -203,7 +215,7 @@ void ScenarioEditor::Render(sf::RenderWindow & wnd, sf::Time delta_time)
 			}
 		}
 
-		if (ImGui::TreeNode("Tools"))
+		if (_scenario && ImGui::TreeNode("Tools"))
 		{
 			for (auto tool : enum_values<ToolType>())
 			{
@@ -216,6 +228,96 @@ void ScenarioEditor::Render(sf::RenderWindow & wnd, sf::Time delta_time)
 					_tool = tool;
 				}
 			}
+			ImGui::TreePop();
+		}
+
+		if (_scenario && ImGui::TreeNode("Selection"))
+		{
+			static char sAlignmentSeparation[3] = { "15" };
+			const auto separator = atoi(sAlignmentSeparation);
+
+			for (auto task : enum_values<SelectionTask>())
+			{
+				auto sv = enum_name(task);
+				string data{ sv.data(), sv.size() };
+				//data = data.substr(0, 1);
+
+				if (ImGui::Button(data.c_str()) && IsAnyObjectSelected())
+				{
+					auto objects = GetSelectedObjects();
+					if(!objects.empty())
+					{
+						ranges::sort(objects, 
+							[&](const auto * left, const auto * right)
+							{
+								return left->GetCollisionRect().top < right->GetCollisionRect().top;
+							});
+
+						switch(task)
+						{
+						case SelectionTask::SeparateHorizontally:
+						{
+							auto rect = objects[0]->GetCollisionRect();
+							float start_pos = rect.left;
+							for (szt i = 0; i < objects.size(); ++i)
+							{
+								auto rect = objects[i]->GetCollisionRect();
+								objects[i]->SetPosition(start_pos + (rect.width * i) + (separator * i), rect.top);
+							}
+
+							_remake_stack._list.push(EditorAction{ EditorActionID::AlignHorizontally });
+							break;
+						}
+
+						case SelectionTask::SeparateVertically:
+						{
+							auto rect = objects[0]->GetCollisionRect();
+							float start_pos = rect.top;
+							for(szt i = 0; i < objects.size(); ++i)
+							{
+								rect = objects[i]->GetCollisionRect();
+								objects[i]->SetPosition(rect.left, start_pos + (rect.height * i) + (separator * i));
+							}
+							
+							_remake_stack._list.push(EditorAction{ EditorActionID::AlignVertically });
+							break;
+						}
+
+						case SelectionTask::AlignVertically:
+						{
+							auto rect = objects[0]->GetCollisionRect();
+							float start_pos = rect.left;
+							for (szt i = 0; i < objects.size(); ++i)
+							{
+								auto rect = objects[i]->GetCollisionRect();
+								objects[i]->SetPosition(start_pos, rect.top);
+							}
+
+							_remake_stack._list.push(EditorAction{ EditorActionID::AlignVertically });
+							break;
+						}
+
+						case SelectionTask::AlignHorizontally:
+						{
+							auto rect = objects[0]->GetCollisionRect();
+							float start_pos = rect.top;
+							for (szt i = 0; i < objects.size(); ++i)
+							{
+								auto rect = objects[i]->GetCollisionRect();
+								objects[i]->SetPosition(rect.left, start_pos);
+							}
+							Log::Debug("Objects selected: {}", objects.size());
+							_remake_stack._list.push(EditorAction{ EditorActionID::AlignHorizontally });
+							break;
+						}
+
+					}
+					}
+				}
+			}
+
+			ImGui::InputText("Separation", sAlignmentSeparation, IM_ARRAYSIZE(sAlignmentSeparation));
+
 			ImGui::TreePop();
 		}
 
@@ -414,4 +516,69 @@ void ScenarioEditor::SaveScenario(string file_name)
 void ScenarioEditor::LoadScenario(string file_name)
 {
 	_scenario = make_unique<Scenario>(LoadJson(kDataFolder + "scenario\\"s + file_name));
+}
+
+bool ScenarioEditor::IsAnyObjectSelected() const
+{
+	assert(_scenario);
+
+	for (auto& object : _scenario->_objects)
+	{
+		if (!object->IsSelectable())
+			continue;
+
+		return object->_selected;
+	}
+
+	return true;
+}
+
+vector<Object*> ScenarioEditor::GetSelectedObjects()
+{
+	assert(_scenario);
+	
+	vector<Object*> objects;
+
+	for (auto& object : _scenario->_objects)
+	{
+		if (!object->IsSelectable() || !object->_selected)
+			continue;
+
+		objects.push_back(object.get());
+	}
+
+	return objects;
+}
+
+void ScenarioEditor::PlayScenario()
+{
+	// Method without saving
+	if(true){
+		unique_ptr<Scenario> scenario_to_play = std::move(_scenario);
+
+		//auto name = _scenario->_name;
+		//SaveScenario(name);
+
+		g_scene->Set(SceneID::Scenario);
+		ScenarioScene * scene = g_scene->Get<ScenarioScene>();
+	
+		scene->_scenario = std::move(scenario_to_play);
+	}
+
+	// Method via saving
+	/*{
+		if(_scenario->_name.empty())
+		{
+			ImGui::OpenPopup("SaveScenarioModal");
+			return;
+		}
+
+		SaveScenario(_scenario->_name);
+		
+		auto file_name = _scenario->_name;
+
+		g_scene->Set(SceneID::Scenario);
+		ScenarioScene * scene = g_scene->Get<ScenarioScene>();
+		scene->_scenario = make_unique<Scenario>(LoadJson(kDataFolder + "scenario\\"s + file_name));
+	}*/
 }

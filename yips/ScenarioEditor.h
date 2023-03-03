@@ -1,8 +1,34 @@
 #pragma once
 #include "Scene.h"
 
+enum class EditorActionID
+{
+	AddObject,
+	AlignVertically,
+	AlignHorizontally,
+};
+
+class EditorAction 
+{
+public:
+	EditorActionID _id;
+};
+
+class RemakeStack
+{
+public:
+	struct Action
+	{
+		EditorAction _id;
+		//std::vector<unique_ptr<Object>> _objects;
+	};
+
+	std::stack<EditorAction> _list;
+};
+
 class BallObstacle;
 class Scenario;
+class Object;
 class ScenarioEditor : public Scene
 {
 public:
@@ -40,6 +66,23 @@ public: // Section: Top menu
 		Default = Position,
 	};
 
+	enum class SelectionTask
+	{
+		AlignVertically, // Put at the same line than first selected
+		AlignHorizontally, // Same but Horizontal
+		SeparateVertically, // Separate between selected by given pixels 
+		SeparateHorizontally, // Same but Horizontal
+		//CenterHorizontally,
+		//CenterVertically,
+	};
+
 	ToolType _tool = ToolType::Default;
+
+	bool IsAnyObjectSelected() const;
+	vector<Object*> GetSelectedObjects();
+
+	RemakeStack _remake_stack;
+
+	void PlayScenario();
 };
 

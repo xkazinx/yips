@@ -12,6 +12,12 @@ public:
 
 	void Set(SceneID id);
 
+	template<typename T> 
+	T * Get()
+	{
+		return (T*)_ptr.get();
+	}
+
 private:
 	unique_ptr<Scene> _ptr;
 };

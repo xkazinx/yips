@@ -46,9 +46,9 @@ void Object::Render(sf::RenderTarget& wnd, sf::Time delta_time)
 
 		auto rect = GetCollisionRect();
 		{
-			Log::Debug("collisionrect: {} {} {} {}",
-				rect.left, rect.top, rect.width, rect.height
-			);
+			//Log::Debug("collisionrect: {} {} {} {}",
+				//rect.left, rect.top, rect.width, rect.height
+			//);
 
 			sBounds.setPosition(rect.left, rect.top);
 			sBounds.setSize({ (float)rect.width, (float)rect.height });
