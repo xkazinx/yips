@@ -25,34 +25,25 @@ public:
 public:
 	sf::View _view;
 
-	float _camera_x, _camera_y;
-	void SetCameraPoint(float x, float y);
-	
 	bool IsOnSight(float x, float y) const {
-		return x >= _camera_x && x <= _camera_x + kChunkSizeX
-			&& y >= _camera_y && y <= _camera_y + kChunkSizeY;
+		auto view_viewport	= _view.getViewport();
+		//auto view_center		= _view.getCenter();
+		//auto view_rotation	= _view.getRotation();
+		auto view_size			= _view.getSize();
+
+		// #test
+
+		return x >= view_viewport.left && x <= view_viewport.left + view_size.x
+			&& y >= view_viewport.top && y <= view_viewport.top + view_size.y;
 	}
 	
 public:
 	ChunkIdx _chunk_cnt;
-	
-	void UpdateCurrentChunkIdx();
-	ChunkIdx _current_chunk;
 
 	string _name;
 
 public:
 	sf::VertexArray _line;
-
-	static Vector2f GetChunkWorldPos(ChunkIdx chunk_idx)
-	{
-		return { 0, float(chunk_idx * -kChunkSizeY) };
-	}
-
-	Vector2f GetChunkWorldPos()
-	{
-		return GetChunkWorldPos(_current_chunk);
-	}
 
 public:
 	vector<unique_ptr<Projectile>> _projectiles;

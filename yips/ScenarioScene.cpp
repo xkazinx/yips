@@ -15,7 +15,7 @@ ScenarioScene::ScenarioScene() : Scene(SceneID::Scenario)
    constexpr auto kChunkCount = 16;
    _scenario = make_unique<Scenario>(kChunkCount);
 
-   _scenario->AddObject<Obstacle>(make_unique<BallObstacle>(Vector2f{ kChunkSizeX / 2, -(kChunkSizeY / 2 )}));
+   _scenario->AddObject<Obstacle>(make_unique<BallObstacle>(Vector2f{ kViewSizeX / 2, kViewSizeY }));
 }
 
 bool ScenarioScene::HandleEvents(sf::Event& event)
@@ -31,7 +31,7 @@ bool ScenarioScene::HandleEvents(sf::Event& event)
          float proj_radius = 10.f;
          _scenario->_projectiles.push_back(make_unique<BallProjectile>(Vector2f
             {
-            _ship->_ship_sprite->_spr.getPosition().x + ((_ship->_ship_sprite->_spr.getTexture()->getSize().x * scale) / 2) - proj_radius,
+            _ship->_ship_sprite->_spr.getPosition().x - ((_ship->_ship_sprite->_spr.getTexture()->getSize().x * scale) / 2) - proj_radius,
             _ship->_ship_sprite->_spr.getPosition().y 
             }
          ));
@@ -41,8 +41,8 @@ bool ScenarioScene::HandleEvents(sf::Event& event)
       case sf::Keyboard::O:
          auto obs = _scenario->AddObject<BallObstacle>(make_unique<BallObstacle>(Vector2f
             {
-            (float)g_rand->Generate<u16>(0u, kChunkSizeX), 
-            _scenario->_view.getCenter().y - kChunkSizeY / 2
+            (float)g_rand->Generate<u16>(0u, kViewSizeX), 
+            _scenario->_view.getCenter().y + kViewSizeY / 2.f
             }
          ));
          
@@ -73,7 +73,7 @@ void ScenarioScene::Tick(sf::Time delta_time)
 
    {
       float velocity = 50.f;
-      _scenario->Move(0, -velocity * delta_time.asSeconds());
+      _scenario->Move(0, velocity * delta_time.asSeconds());
    }
 
    _ship->Tick(delta_time);

@@ -11,8 +11,8 @@ void StarsBackground::Generate()
 	for(int i = 0; i < kStarsCount; ++i)
 	{
 		_vertex_positions.push_back({ 
-			(float)g_rand->Generate<int>(0, kChunkSizeX), 
-			g_rand->Generate<float>(_end_y, _origin_y)
+			(float)g_rand->Generate<int>(0, kViewSizeX), 
+			g_rand->Generate<float>(_origin_y, _end_y)
 		});
 
 		_vertex_shapes.push_back(sf::Vertex(

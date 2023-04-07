@@ -81,6 +81,8 @@ bool ScenarioEditor::HandleEvents(sf::Event& event)
 
 			auto mp = sf::Mouse::getPosition(g_app->_wnd);
 			auto mc = g_app->_wnd.mapPixelToCoords(sf::Mouse::getPosition(g_app->_wnd));
+			auto event_mp = sf::Vector2i{ event.mouseButton.x, event.mouseButton.y};
+			auto event_mc = g_app->_wnd.mapPixelToCoords(event_mp);
 
 			if(_top_menu_rect.contains(mp))
 			{
@@ -90,21 +92,12 @@ bool ScenarioEditor::HandleEvents(sf::Event& event)
 
 			if(_tool == ToolType::Position)
 			{
-				// auto chunk_idx = CalcChunkIdx(y);
-				auto chunk_idx = (kChunkSizeY + _scenario->_camera_y - mp.y) / kChunkSizeY;
+				PrintDebug("Clicked event.mouseButton: {}/{} | event.mouseButton: {}/{}", 
+						event.mouseButton.x, event.mouseButton.y, event_mc.x, event_mc.y);
 			
-				//y = kChunkSizeY - ((chunk_idx * kChunkSizeY) - (kChunkSizeY * floor(chunk_idx)));
+				auto obj = _scenario->AddObject(make_unique<BallObstacle>(event_mc));
 
-				PrintDebug("Clicked on chunk_idx({}) _scenario->_camera_y({}), event.mouseButton.y({}) chunk_pos_y({}) x({}) y({})", 
-					floor(chunk_idx), _scenario->_camera_y, event.mouseButton.y, mp.y, mp.x, mp.y);
-			
-				auto obj = _scenario->AddObject(make_unique<BallObstacle>(Vector2f{ (float)mc.x, (float)mc.y }));
-
-				Log::Debug("MouseButtonPressed: _scenario->_objects.size(): {}", _scenario->_objects.size());
-
-				//mp2.y += kChunkSizeY;
-				// Deduce final coord to place at
-				obj->_initial_pos = { (float)mp.x, (float)mp.y };
+				obj->_initial_pos = event_mc;
 
 				{
 					_remake_stack._list.push(EditorAction{ EditorActionID::AddObject });
@@ -121,8 +114,8 @@ bool ScenarioEditor::HandleEvents(sf::Event& event)
 					auto rect = object->GetCollisionRect();
 					Log::Debug("rect: {} {} {} {}, mp: {} {}, mc: {} {}",
 						rect.left, rect.top, rect.width, rect.height,
-						mp.x, mp.y, 
-						mc.x, mc.y
+						event_mp.x, event_mp.y, 
+						event_mc.x, event_mc.y
 					);
 
 					//rect.width += rect.left;
@@ -402,11 +395,11 @@ void ScenarioEditor::Tick(sf::Time delta_time)
 
 	if(_move_up)
 	{
-		_scenario->Move(0, -velocity * delta_time.asSeconds());
+		_scenario->Move(0, velocity * delta_time.asSeconds());
 	}
 	else if(_move_down)
 	{
-		_scenario->Move(0, velocity * delta_time.asSeconds());
+		_scenario->Move(0, -velocity * delta_time.asSeconds());
 	}
 }
 
@@ -464,51 +457,6 @@ void ScenarioEditor::SaveScenario(string file_name)
 			jobjects.push_back(jobject);
 		}
 	}
-	/*
-	json["chunk_cnt"] = _scenario->_chunk_cnt;
-
-	auto & jchunks = json["chunks"];
-	
-	size_t chunk_idx = 0;
-	for(auto & chunk : _scenario->_chunks)
-	{
-		auto & jchunk = jchunks[chunk->_idx];
-		jchunk["idx"] = chunk->_idx;
-		
-		PrintDebug("ChunkIdx({}) ObjectsCount({})", chunk_idx++, chunk->_objects.size());
-
-		size_t object_idx = 0;
-		for(auto & object : chunk->_objects)
-		{
-			PrintDebug("ObjectID({})", enum_name(object->_id));
-
-			if(object->_id == ObjectID::Chunk || 
-				object->_id == ObjectID::None)
-			{
-				continue;
-			}
-
-			auto & jobject = jchunk["objects"][object_idx++];
-			if(object->_initial_pos.x != -1.f && object->_initial_pos.y != -1.f)
-			{
-				jobject.emplace("x", object->_initial_pos.x);
-				jobject.emplace("y", object->_initial_pos.y);
-			}
-			jobject.emplace("type", enum_name(object->_id));
-			switch(object->_id)
-			{
-			case ObjectID::Obstacle:
-			{
-				auto * obstacle = dynamic_cast<Obstacle*>(object.get());
-				assert(obstacle);
-
-				jobject.emplace("obstacle_type", enum_name(obstacle->_type));
-				break;
-			}
-			}
-		}
-	}
-	*/
 
 	out << json.dump(4);
 }

@@ -12,7 +12,8 @@ ObjectShip1::ObjectShip1()
 
 	_ship_sprite->_spr.setTexture(_ship_sprite->_texture);
 	_ship_sprite->_spr.setScale({ scale, scale });
-	_ship_sprite->_spr.setPosition(g_res_x / 2.f, -(kChunkSizeY / 4) + (_ship_sprite->_spr.getTexture()->getSize().y * scale));
+	_ship_sprite->_spr.setPosition(g_res_x / 2.f, 15.f + (_ship_sprite->_spr.getTexture()->getSize().y * scale));
+	_ship_sprite->_spr.setRotation(180);
 }
 
 bool ObjectShip1::HandleEvents(sf::Event & event) 
@@ -24,7 +25,7 @@ void ObjectShip1::Tick(sf::Time delta_time)
 {
 	{
       float velocity = 50.f;
-      _ship_sprite->Move(0, -velocity * delta_time.asSeconds());
+      _ship_sprite->Move(0, velocity * delta_time.asSeconds());
    }
 
 	Object::Tick(delta_time);
@@ -43,21 +44,21 @@ void ObjectShip1::Render(sf::RenderTarget& wnd, sf::Time delta_time)
 
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
-		_ship_sprite->Move(velocity * delta_time.asSeconds(), 0.f);
+		_ship_sprite->Move(-velocity * delta_time.asSeconds(), 0.f);
 	}
 	
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
-		_ship_sprite->Move(-velocity * delta_time.asSeconds(), 0.f);
+		_ship_sprite->Move(velocity * delta_time.asSeconds(), 0.f);
 	}
 
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
-		_ship_sprite->Move(0.f, -velocity * delta_time.asSeconds());
+		_ship_sprite->Move(0.f, velocity * delta_time.asSeconds());
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
-		_ship_sprite->Move(0.f, velocity * delta_time.asSeconds());
+		_ship_sprite->Move(0.f, -velocity * delta_time.asSeconds());
 	}
 	/*
 	auto rect = _ship_sprite->_spr.getGlobalBounds(); // make GetRect function

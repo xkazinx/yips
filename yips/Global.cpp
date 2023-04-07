@@ -12,7 +12,7 @@ namespace Global
 
 	App * g_app;
 
-	u16 g_res_x = kChunkSizeX, g_res_y = kChunkSizeY;
+	u16 g_res_x = kViewSizeX, g_res_y = kViewSizeY;
 
 	void Initialize()
 	{

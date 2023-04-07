@@ -14,10 +14,13 @@ Scenario::Scenario(Scenario&& scenario)
 	
 	_chunk_cnt = scenario._chunk_cnt;
 
-	_view.setCenter(0.f, 0.f);
-	_view.reset({ 0.f, 0.f, kChunkSizeX, kChunkSizeY });
-	_view.move(0.f, -kChunkSizeY);
-	g_app->_wnd.setView(_view);
+	{
+		_view.setCenter(0.f, 0.f);
+		_view.reset({ 0.f, 0.f, kViewSizeX, kViewSizeY });
+		_view.move(0.f, 0.f);
+
+		g_app->_wnd.setView(_view);
+	}
 
 	_objects = std::move(scenario._objects);
 }
@@ -33,11 +36,14 @@ void Scenario::Initialize(ChunkIdx chunk_cnt)
 	
 	_chunk_cnt = chunk_cnt;
 
-	_view.reset({ 0.f, 0.f, kChunkSizeX, kChunkSizeY });
-	_view.move(0.f, -kChunkSizeY);
-	g_app->_wnd.setView(_view);
+	{
+		_view.reset({ 0.f, 0.f, kViewSizeX, kViewSizeY });
+		_view.move(0.f, 0.f);
 
-	AddObject(make_unique<StarsBackground>(0.f, float(kChunkSizeY * chunk_cnt)));
+		g_app->_wnd.setView(_view);
+	}
+
+	AddObject(make_unique<StarsBackground>(0.f, float(kViewSizeY * chunk_cnt)));
 }
 
 void Scenario::Tick(sf::Time delta_time)
@@ -78,64 +84,69 @@ void Scenario::Tick(sf::Time delta_time)
 
 void Scenario::Render(sf::RenderTarget & wnd, sf::Time delta_time)
 {
-	g_app->_wnd.setView(_view);
+	g_app->_wnd.setView(g_app->_wnd.getDefaultView());
 
-	auto mp = g_app->_wnd.mapPixelToCoords(sf::Mouse::getPosition(g_app->_wnd));
+	auto mc = g_app->_wnd.mapPixelToCoords(sf::Mouse::getPosition(g_app->_wnd));
+	auto mp = g_app->_wnd.mapCoordsToPixel(mc);
 
-	//Print("{} {}", mp.x, mp.y);
-	
-	g_app->RenderText(format("_camera_x: {}, _camera_y: {}", 
-		_camera_x, _camera_y).c_str(), Vector2f(mp.x, mp.y + 20), 15);
-	
-	g_app->RenderText(format("_current_chunk: {}", 
-		_current_chunk).c_str(), Vector2f(mp.x, mp.y + 35), 15);
-
-	g_app->RenderText(format("_current_chunk * -kChunkSizeY: {}", 
-		_current_chunk * -kChunkSizeY).c_str(), Vector2f(mp.x, mp.y + 50), 15);
-
-	auto chunk_idx = (kChunkSizeY + _camera_y - mp.y) / kChunkSizeY;
-	g_app->RenderText(format("CurrentMouseChunk: {}", chunk_idx).c_str(), Vector2f(mp.x, mp.y + 65), 15);
-
-	float y = kChunkSizeY - ((chunk_idx * kChunkSizeY) - (kChunkSizeY * floor(chunk_idx)));
-	g_app->RenderText(format("CurrentMouseChunkPosY: {}", y).c_str(), Vector2f(mp.x, mp.y + 80), 15);
-
-	//mp.y += kChunkSizeY;
-	g_app->RenderText(format("Mouse Pos: {} {}", mp.x, mp.y).c_str(), Vector2f(mp.x, mp.y + 95), 15);
-
-	Object::Render(wnd, delta_time);
-	
-	/*
-	for(auto & chunk : _chunks)
 	{
-		chunk->Render(wnd, delta_time);
+		Vector2f text_pos = { mc.x, mc.y + 20 };
+		constexpr auto text_size = 15u;
+
+		auto view_center = _view.getCenter();
+		g_app->RenderText(format(
+			"view_center: {}/{}", 
+			view_center.x, view_center.y
+		).c_str(), text_pos, text_size);
+
+		text_pos.y += text_size;
+
+		auto view_viewport = _view.getViewport();
+		g_app->RenderText(format(
+			"_view_viewport: l:{} t:{} r:{} b:{}", 
+			view_viewport.left, view_viewport.top, view_viewport.width, view_viewport.height
+		).c_str(), text_pos, text_size);
+
+		text_pos.y += text_size;
+	
+		auto view_rotation = _view.getRotation();
+		g_app->RenderText(format(
+			"view_rotation: {}", 
+			view_rotation
+		).c_str(), text_pos, text_size);
+	
+		text_pos.y += text_size;
+
+		g_app->RenderText(format(
+			"mouse_coord: {}/{}", 
+			mc.x, mc.y
+		).c_str(), text_pos, text_size);
+
+		text_pos.y += text_size;
+
+		g_app->RenderText(format(
+			"mouse_pos: {}/{}",
+			mp.x, mp.y
+		).c_str(), text_pos, text_size);
 	}
-	*/
-	
-	//PrintDebug("Projectile.size: {}", _projectiles.size());
-	for(auto & projectile : _projectiles)
+
 	{
-		projectile->Render(wnd, delta_time);
+		_view.setRotation(180);
+
+		g_app->_wnd.setView(_view);
+
+		Object::Render(wnd, delta_time);
+
+		for (auto& projectile : _projectiles)
+		{
+			projectile->Render(wnd, delta_time);
+		}
 	}
 }
 
 void Scenario::Move(float x, float y)
 {
 	_view.move(x, y);
-
-	_camera_x += x;
-	_camera_y += y;
-
-	UpdateCurrentChunkIdx();
-}
-
-void Scenario::SetCameraPoint(float x, float y)
-{
-	
-}
-
-void Scenario::UpdateCurrentChunkIdx()
-{
-	_current_chunk = CalcChunkIdx(_camera_y);
 }
 
 void Scenario::Load(const Json & json)
@@ -164,9 +175,9 @@ void Scenario::Load(const Json & json)
 						auto x = jobject.value("x", 0.f);
 						auto y = jobject.value("y", 0.f);
 
-						y -= kChunkSizeY;
-
 						_objects.push_back(make_unique<BallObstacle>(Vector2f{ (float)x, (float)y }));
+
+						auto & object = _objects.back();
 					}
 				}
 			}

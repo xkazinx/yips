@@ -87,7 +87,7 @@ void BallObstacle::Tick(sf::Time delta_time)
 					_move_timer = timeGetTime() + 100;
 				}
 
-				Move(x * delta_time.asSeconds(), y * delta_time.asSeconds());
+				Move(-x * delta_time.asSeconds(), -y * delta_time.asSeconds());
 
 				/*
 				{
@@ -105,7 +105,7 @@ void BallObstacle::Tick(sf::Time delta_time)
 			}
 			else
 			{
-				Move(_velocity_x * delta_time.asSeconds(), _velocity_y * delta_time.asSeconds());
+				Move(-_velocity_x * delta_time.asSeconds(), -_velocity_y * delta_time.asSeconds());
 			}
 		}
 	}

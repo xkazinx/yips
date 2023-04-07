@@ -8,8 +8,8 @@ namespace Global
 {
 	extern unique_ptr<Scenes> g_scene;
 	
-	constexpr u16 kChunkSizeX = 1024;
-	constexpr u16 kChunkSizeY = 768;
+	constexpr u16 kViewSizeX = 1024;
+	constexpr u16 kViewSizeY = 768;
 
 	extern u16 g_res_x, g_res_y;
 
@@ -56,7 +56,7 @@ namespace Global
 
 	inline ChunkIdx CalcChunkIdx(float y)
 	{
-		return static_cast<ChunkIdx>(floor(abs(y / kChunkSizeY)));
+		return static_cast<ChunkIdx>(floor(abs(y / kViewSizeY)));
 	}
 
 	inline Json LoadJson(string file_name)

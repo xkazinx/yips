@@ -23,7 +23,7 @@ void BallProjectile::Tick(sf::Time delta_time)
 	{
 		float bg_velocity = 50.f;
 		float velocity = bg_velocity + 700.f;
-		_shape.move(0.f, -velocity * delta_time.asSeconds());
+		_shape.move(0.f, velocity * delta_time.asSeconds());
 	}
 }
 

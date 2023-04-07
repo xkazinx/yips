@@ -5,7 +5,7 @@ class Background : public Object
 {
 public:
 	Background(float origin_y, float height) 
-		: _origin_x(0), _origin_y(origin_y), _end_y(origin_y - height)
+		: _origin_x(0), _origin_y(origin_y), _end_y(origin_y + height)
 	{
 
 	}
