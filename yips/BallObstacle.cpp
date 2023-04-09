@@ -8,7 +8,6 @@ BallObstacle::BallObstacle(Vector2f origin)
 	_shape.setFillColor(sf::Color(25, 25, 25));
 	_color = sf::Color::White;
 
-	Print("Created BallObstacle at {}/{}", origin.x, origin.y);
 	SetPosition(origin.x, origin.y);
 
 	// #todo Call this programatically for all objects?
@@ -33,6 +32,37 @@ void BallObstacle::SetPosition(float x, float y)
 void BallObstacle::Move(float x, float y)
 {
 	SetPosition(x + _shape.getPosition().x, y + _shape.getPosition().y);
+}
+
+void BallObstacle::HandleCollision(Object* obj)
+{
+	if(HasExpired())
+		return;
+
+	Log::Debug("BallObstacle::HandleCollision(ObjectID({}))", enum_name(obj->_id));
+
+	using enum ObjectID;
+	switch (obj->_id)
+	{
+	case Ship:
+		break;
+	case Sprite:
+		break;
+	case Object:
+		break;
+	case Obstacle:
+		break;
+	case Projectile:
+		break;
+	case Item:
+		break;
+	case None:
+		break;
+	default:
+		break;
+	}
+
+	Obstacle::HandleCollision(obj);
 }
 
 void BallObstacle::Tick(sf::Time delta_time)

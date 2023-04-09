@@ -10,6 +10,8 @@ class ScenarioScene : public Scene, public Object
 public:
 	ScenarioScene();
 
+	void Initialize();
+
 	bool HandleEvents(sf::Event & event) override;
 	void Render(sf::RenderWindow & wnd, sf::Time delta_time) override;
 	void Tick(sf::Time delta_time) override;

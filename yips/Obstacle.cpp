@@ -27,12 +27,26 @@ void Obstacle::Tick(sf::Time delta_time)
 
 void Obstacle::HandleCollision(Object * obj)
 {
+	if (HasExpired())
+		return;
+
 	Log::Debug("Obstacle::HandleCollision(ObjectID({}))", enum_name(obj->_id));
 
-	if(obj->_id == ObjectID::Obstacle)
+	switch (obj->_id)
 	{
-		Log::Debug("Returned on collision of obstacle against obstacle");
+		using enum ObjectID;
+	case Ship:
+	case Sprite:
+	case Object:
+	case Obstacle:
+	case Item:
+	case None:
+	default:
 		return;
+
+	case Projectile:
+		Expire();
+		break;
 	}
 
 	auto scene = g_scene->Get<ScenarioScene>();

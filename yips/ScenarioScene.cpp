@@ -10,14 +10,16 @@
 
 ScenarioScene::ScenarioScene() : Scene(SceneID::Scenario)
 {
-   constexpr auto kChunkCount = 16;
-
+	constexpr auto kChunkCount = 16;
    _scenario = make_unique<Scenario>(kChunkCount);
 
-   _scenario->AddObject<Object>(make_unique<ObjectShip1>());
-   _ship = (ObjectShip1*)_scenario->_objects.back().get();
+   Initialize();
+}
 
-   _scenario->AddObject<Obstacle>(make_unique<BallObstacle>(Vector2f{ kViewSizeX / 2, kViewSizeY }));
+void ScenarioScene::Initialize()
+{
+	_scenario->AddObject<Object>(make_unique<ObjectShip1>());
+	_ship = (ObjectShip1*)_scenario->_objects.back().get();
 }
 
 bool ScenarioScene::HandleEvents(sf::Event& event)

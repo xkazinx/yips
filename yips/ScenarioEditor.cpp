@@ -213,6 +213,7 @@ void ScenarioEditor::Render(sf::RenderWindow & wnd, sf::Time delta_time)
 			auto name = _scenario->_name;
 			g_scene->Set(SceneID::Scenario);
 			g_scene->Get<ScenarioScene>()->_scenario = make_unique<Scenario>(LoadJson(kDataFolder + string(kScenarioFolder) + name));
+			g_scene->Get<ScenarioScene>()->Initialize();
 			return;
 		}
 

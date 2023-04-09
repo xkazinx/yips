@@ -21,36 +21,7 @@ public:
 		return _shape.getGlobalBounds();
 	}
 
-	void HandleCollision(Object * obj) override
-	{
-		Log::Debug("BallProjectile::HandleCollision(ObjectID({}))", enum_name(obj->_id));
-		using enum ObjectID;
-		switch (obj->_id)
-		{
-		case Ship:
-			break;
-		case Sprite:
-			break;
-		case Chunk:
-			break;
-		case Object:
-			break;
-		case Obstacle:
-			break;
-		case Projectile:
-			break;
-		case Item:
-			break;
-		case None:
-			break;
-		default:
-			break;
-		}
-
-		Expire();
-
-		Projectile::HandleCollision(obj);
-	}
+	void HandleCollision(Object * obj) override;
 
 	sf::CircleShape _shape;
 	Vector2f _origin;

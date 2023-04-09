@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "BallProjectile.h"
+#include "Item.h"
 
 BallProjectile::BallProjectile(Vector2f origin) 
 	: Projectile(ProjectileID::Ball, origin)
@@ -31,4 +32,56 @@ void BallProjectile::SetPosition(float x, float y)
 {
 	_shape.setPosition(x, y);
 	Object::SetPosition(x, y);
+}
+
+void BallProjectile::HandleCollision(Object* obj)
+{
+	if (HasExpired())
+		return;
+
+	Log::Debug("BallProjectile::HandleCollision(ObjectID({}))", enum_name(obj->_id));
+
+	auto expire = false;
+
+	using enum ObjectID;
+	switch (obj->_id)
+	{
+	case Ship:
+		break;
+	case Sprite:
+		break;
+	case Object:
+	case Obstacle:
+		expire = true;
+		break;
+	case Projectile:
+		switch(obj->Get<::Projectile>()->_projectile_id)
+		{
+		case ProjectileID::Ball:
+		default:
+			expire = true;
+			break;
+		}
+		break;
+	case Item:
+		switch (obj->Get<::Item>()->_type)
+		{
+		case ItemType::GreenEnergy:
+			break;
+		case ItemType::Velocity:
+			break;
+		case ItemType::Invincible:
+			break;
+		}
+		break;
+	case None:
+		break;
+	default:
+		break;
+	}
+
+	if(expire)
+		Expire();
+
+	Projectile::HandleCollision(obj);
 }

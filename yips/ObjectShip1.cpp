@@ -54,6 +54,9 @@ sf::FloatRect ObjectShip1::GetCollisionRect() const
 
 void ObjectShip1::HandleCollision(Object* obj)
 {
+	if (HasExpired())
+		return;
+
 	Log::Debug("HandleCollision(ObjectID({}))", enum_name(obj->_id));
 
 	using enum ObjectID;
@@ -62,8 +65,6 @@ void ObjectShip1::HandleCollision(Object* obj)
 	case Ship:
 		break;
 	case Sprite:
-		break;
-	case Chunk:
 		break;
 	case Object:
 		break;

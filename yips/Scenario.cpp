@@ -63,7 +63,7 @@ void Scenario::Tick(sf::Time delta_time)
 		auto & obj = *it;
 
 		// #todo if not in sight, continue
-		Log::Debug("Looping for ObjectID: {}", enum_name(obj->_id));
+
 		for(auto proj_it = _projectiles.begin(); proj_it != _projectiles.end();)
 		{
 			if(proj_it->get()->IsCollision(obj.get()))
@@ -100,29 +100,6 @@ void Scenario::Tick(sf::Time delta_time)
 				++it;
 		}
 	}
-
-	/*
-	for (auto it = _objects.begin(); it != _objects.end();)
-	{
-		if (g_scene->Is(SceneID::Scenario))
-		{
-			if (it->get()->_id == ObjectID::Item)
-			{
-				Log::Debug("Item looped through ship collision check");
-				if(g_scene->Get<ScenarioScene>()->_ship->IsCollision(it->get()))
-				{
-					Log::Debug("COLLISION HAPPENED WITH SHIP!!!!!!!!!!!!!!!!!!!!!!!!");
-					g_scene->Get<ScenarioScene>()->_ship->HandleCollision(it->get()->_id);
-				}
-			}
-		}
-
-		if (it->get()->HasExpired())
-			it = _objects.erase(it);
-		else
-			++it;
-	}
-	*/
 }
 
 void Scenario::Render(sf::RenderTarget & wnd, sf::Time delta_time)
