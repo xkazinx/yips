@@ -4,6 +4,7 @@
 enum class MoveType
 {
 	Wave,
+	Linear,
 
 	None = u8(-1)
 };
@@ -18,6 +19,8 @@ public:
 
 	virtual void Render(sf::RenderTarget& wnd, sf::Time delta_time);
 	virtual void Tick(sf::Time delta_time);
+
+	void HandleCollision(Object * obj) override;
 
 	ObstacleType _type;
 	/*

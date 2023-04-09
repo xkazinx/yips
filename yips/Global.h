@@ -20,6 +20,7 @@ namespace Global
 	extern unique_ptr<Random> g_rand;
 
 	constexpr char kDataFolder[] = "..\\data\\";
+	constexpr char kScenarioFolder[] = "scenario\\";
 
 	enum class SceneID 
 	{
@@ -38,6 +39,7 @@ namespace Global
 		Object, // Scenario Object
 		Obstacle,
 		Projectile,
+		Item,
 
 		None = u8(-1)
 	};
@@ -47,9 +49,26 @@ namespace Global
 		Ball,
 	};
 
-	enum class ObstacleType
+	enum class ObstacleType : u8
 	{
 		Ball,
+
+		None = u8(-1)
+	};
+	
+	enum class ItemType : u8
+	{
+		GreenEnergy,
+		Velocity,
+		Invincible,
+	};
+
+	enum class PowerUp : u8
+	{
+		Velocity,
+		Invincible,
+		RightLaser,
+		LeftLaser,
 	};
 
 	using ChunkIdx = u16;

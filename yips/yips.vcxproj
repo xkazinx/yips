@@ -173,10 +173,10 @@
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="Misc.cpp" />
     <ClCompile Include="Obstacle.cpp" />
-    <ClCompile Include="Obstacle2.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="BallProjectile.cpp" />
     <ClCompile Include="Scenario.cpp" />
@@ -218,11 +218,11 @@
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="imgui_helper.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="magic_enum.h" />
     <ClInclude Include="Misc.h" />
     <ClInclude Include="Obstacle.h" />
-    <ClInclude Include="Obstacle2.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="BallProjectile.h" />
     <ClInclude Include="Scenario.h" />

@@ -10,10 +10,12 @@
 
 ScenarioScene::ScenarioScene() : Scene(SceneID::Scenario)
 {
-   _ship = make_unique<ObjectShip1>();
-
    constexpr auto kChunkCount = 16;
+
    _scenario = make_unique<Scenario>(kChunkCount);
+
+   _scenario->AddObject<Object>(make_unique<ObjectShip1>());
+   _ship = (ObjectShip1*)_scenario->_objects.back().get();
 
    _scenario->AddObject<Obstacle>(make_unique<BallObstacle>(Vector2f{ kViewSizeX / 2, kViewSizeY }));
 }
@@ -38,7 +40,8 @@ bool ScenarioScene::HandleEvents(sf::Event& event)
          return true;
       }
 
-      case sf::Keyboard::O:
+      case sf::Keyboard::W:
+      {
          auto obs = _scenario->AddObject<BallObstacle>(make_unique<BallObstacle>(Vector2f
             {
             (float)g_rand->Generate<u16>(0u, kViewSizeX), 
@@ -49,8 +52,23 @@ bool ScenarioScene::HandleEvents(sf::Event& event)
          obs->_velocity_x = 10.f;
          obs->_velocity_y = 0.f;//(float)g_rand->Generate<u16>(0.f, 1.f);
          obs->_move_type = MoveType::Wave;
-
          break;
+      }
+
+		case sf::Keyboard::L:
+      {
+			auto obs = _scenario->AddObject<BallObstacle>(make_unique<BallObstacle>(Vector2f
+				{
+				(float)g_rand->Generate<u16>(0u, kViewSizeX),
+				_scenario->_view.getCenter().y + kViewSizeY / 2.f
+				}
+			));
+
+			obs->_velocity_x = 10.f;
+			obs->_velocity_y = 0.f;//(float)g_rand->Generate<u16>(0.f, 1.f);
+			obs->_move_type = MoveType::Linear;
+			break;
+      }
       }
       break;
    }
@@ -63,8 +81,6 @@ void ScenarioScene::Render(sf::RenderWindow & wnd, sf::Time delta_time)
    Object::Render(wnd, delta_time);
 
    _scenario->Render(wnd, delta_time);
-
-   _ship->Render(wnd, delta_time);
 }
 
 void ScenarioScene::Tick(sf::Time delta_time)
@@ -75,8 +91,6 @@ void ScenarioScene::Tick(sf::Time delta_time)
       float velocity = 50.f;
       _scenario->Move(0, velocity * delta_time.asSeconds());
    }
-
-   _ship->Tick(delta_time);
 
    Object::Tick(delta_time);
 }

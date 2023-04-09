@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "ObjectShip1.h"
 #include "Sprite.h"
+#include "Item.h"
 
 ObjectShip1::ObjectShip1() 
 	: Object(ObjectID::Ship)
@@ -31,6 +32,68 @@ void ObjectShip1::Tick(sf::Time delta_time)
 	Object::Tick(delta_time);
 }
 
+void ObjectShip1::Move(float x, float y)
+{
+	_ship_sprite->Move(x, y);
+}
+
+Vector2f ObjectShip1::GetPosition()
+{
+	return _ship_sprite->GetPosition();
+}
+
+void ObjectShip1::SetPosition(float x, float y)
+{
+	_ship_sprite->SetPosition(x, y);
+}
+
+sf::FloatRect ObjectShip1::GetCollisionRect() const
+{
+	return _ship_sprite->_spr.getGlobalBounds();
+}
+
+void ObjectShip1::HandleCollision(Object* obj)
+{
+	Log::Debug("HandleCollision(ObjectID({}))", enum_name(obj->_id));
+
+	using enum ObjectID;
+	switch (obj->_id)
+	{
+	case Ship:
+		break;
+	case Sprite:
+		break;
+	case Chunk:
+		break;
+	case Object:
+		break;
+	case Obstacle:
+		break;
+	case Projectile:
+		break;
+	case Item:
+		Log::Debug("Ship collided with Item!");
+		switch (obj->Get<::Item>()->_type)
+		{
+		using enum ItemType;
+		case GreenEnergy:
+			break;
+		case Velocity:
+			_power_ups.push_back(PowerUp::Velocity);
+			break;
+		case Invincible:
+			break;
+		}
+		break;
+	case None:
+		break;
+	default:
+		break;
+	}
+
+	Object::HandleCollision(obj);
+}
+
 void ObjectShip1::Render(sf::RenderTarget& wnd, sf::Time delta_time)
 {
 	//wnd.draw(*_test_sprite);
@@ -39,7 +102,7 @@ void ObjectShip1::Render(sf::RenderTarget& wnd, sf::Time delta_time)
 
 	float velocity = 250.f;
 
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || IsPowerUp(PowerUp::Velocity))
 		velocity *= 2.f;
 
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))

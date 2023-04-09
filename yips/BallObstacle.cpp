@@ -103,9 +103,9 @@ void BallObstacle::Tick(sf::Time delta_time)
 				}
 				*/
 			}
-			else
+			else if(_move_type == MoveType::Linear)
 			{
-				Move(-_velocity_x * delta_time.asSeconds(), -_velocity_y * delta_time.asSeconds());
+				Move(0.f, -_velocity_y * delta_time.asSeconds());
 			}
 		}
 	}

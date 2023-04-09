@@ -79,15 +79,19 @@
     <ClCompile Include="Sprites.cpp">
       <Filter>sprite</Filter>
     </ClCompile>
-    <ClCompile Include="BallProjectile.cpp" />
-    <ClCompile Include="Obstacle2.cpp">
-      <Filter>scene\object\obstacle</Filter>
-    </ClCompile>
-    <ClCompile Include="Obstacle.cpp" />
-    <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Misc.cpp">
       <Filter>misc</Filter>
     </ClCompile>
+    <ClCompile Include="Obstacle.cpp">
+      <Filter>scene\object\obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="BallProjectile.cpp">
+      <Filter>scene\object\projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>scene\object\projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="app">
@@ -128,6 +132,9 @@
     </Filter>
     <Filter Include="scene\object\projectile">
       <UniqueIdentifier>{97e5fbb2-68a1-4424-a1a4-c309bf51bc06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scene\object\Item">
+      <UniqueIdentifier>{8da04306-8abe-4a93-a199-7613d4979959}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -218,18 +225,22 @@
     <ClInclude Include="Sprite.h">
       <Filter>sprite</Filter>
     </ClInclude>
-    <ClInclude Include="BallProjectile.h" />
-    <ClInclude Include="Obstacle2.h">
-      <Filter>scene\object\obstacle</Filter>
-    </ClInclude>
-    <ClInclude Include="Obstacle.h" />
-    <ClInclude Include="Projectile.h" />
     <ClInclude Include="imgui_helper.h">
       <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="Misc.h">
       <Filter>misc</Filter>
     </ClInclude>
+    <ClInclude Include="Obstacle.h">
+      <Filter>scene\object\obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="BallProjectile.h">
+      <Filter>scene\object\projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>scene\object\projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="notes.txt">

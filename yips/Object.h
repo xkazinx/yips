@@ -35,8 +35,8 @@ public:
 		return {};
 	};
 
-	virtual void HandleCollision() {
-		
+	virtual void HandleCollision(Object * obj) {
+		Log::Debug("Object::HandleCollision(ObjectID({}))", enum_name(obj->_id));
 	}
 
 	template<typename T = Object>
@@ -50,6 +50,12 @@ public:
 
 	ObjectID _id;
 	Vector2f _pos, _initial_pos = {-1.f, -1.f};
+
+	template<typename T>
+	auto * Get()
+	{
+		return (T*)this;
+	}
 
 private:
 	bool _expired = false;

@@ -12,7 +12,7 @@ StartScene::StartScene() : Scene(SceneID::Start)
 
 	auto texture_size = _title.getTexture()->getSize();
 	_title.setPosition(Vector2f(
-		g_res_x / 2 - texture_size.x / 2,
+		g_res_x / 2.f - texture_size.x / 2.f,
 		g_res_y - 150.f
 	));
 
@@ -74,7 +74,7 @@ void StartScene::Render(sf::RenderWindow & wnd, sf::Time delta_time)
 		//if (_display_start_game)
 		{
 			g_app->RenderText("Press to start game", 
-					Vector2f(g_res_x / 2, ((g_res_y / 2) * 1.5)),
+					Vector2f(g_res_x / 2.f, ((g_res_y / 2.f) * 1.5f)),
 					50, sf::Color::White,
 				[&](sf::Text & sf_text)
 				{

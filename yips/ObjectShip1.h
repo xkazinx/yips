@@ -9,10 +9,25 @@ public:
 
 	ObjectShip1();
 
-	virtual bool HandleEvents(sf::Event & event);
-	virtual void Render(sf::RenderTarget & wnd, sf::Time delta_time);
-	virtual void Tick(sf::Time delta_time);
+	bool HandleEvents(sf::Event & event) override;
+	void Render(sf::RenderTarget & wnd, sf::Time delta_time) override;
+	void Tick(sf::Time delta_time) override;
+
+	void Move(float x, float y) override;
+	Vector2f GetPosition() override;
+	void SetPosition(float x, float y) override;
+
+	sf::FloatRect GetCollisionRect() const override;
+
+	virtual void HandleCollision(Object * obj);
 
 	Sprite * _ship_sprite;
+
+	vector<PowerUp> _power_ups;
+
+	bool IsPowerUp(PowerUp power_up)
+	{
+		return ranges::find(_power_ups, power_up) != _power_ups.end();
+	}
 };
 

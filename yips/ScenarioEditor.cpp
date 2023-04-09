@@ -208,6 +208,14 @@ void ScenarioEditor::Render(sf::RenderWindow & wnd, sf::Time delta_time)
 			}
 		}
 
+		if (_scenario && !_scenario->_name.empty() && ImGui::MenuItem("Play Scenario"))
+		{
+			auto name = _scenario->_name;
+			g_scene->Set(SceneID::Scenario);
+			g_scene->Get<ScenarioScene>()->_scenario = make_unique<Scenario>(LoadJson(kDataFolder + string(kScenarioFolder) + name));
+			return;
+		}
+
 		if (_scenario && ImGui::TreeNode("Tools"))
 		{
 			for (auto tool : enum_values<ToolType>())

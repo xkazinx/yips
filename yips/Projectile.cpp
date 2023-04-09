@@ -2,7 +2,7 @@
 #include "Projectile.h"
 
 Projectile::Projectile(ProjectileID projectile_id, Vector2f origin)
-	: Object(ObjectID::Projectile, origin)
+	: Object(ObjectID::Projectile, origin), _projectile_id(projectile_id)
 {
 
 }
