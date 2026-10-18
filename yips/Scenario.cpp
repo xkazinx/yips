@@ -60,16 +60,17 @@ void Scenario::Tick(sf::Time delta_time)
 	
 	for(auto it = _objects.begin(); it != _objects.end();)
 	{
-		auto & obj = *it;
-
 		// #todo if not in sight, continue
+
+		Log::Debug("First Ticking ObjectID({})", enum_name(it->get()->_id));
 
 		for(auto proj_it = _projectiles.begin(); proj_it != _projectiles.end();)
 		{
-			if(proj_it->get()->IsCollision(obj.get()))
+			if(proj_it->get()->IsCollision(it->get()))
 			{
-				obj->HandleCollision(proj_it->get());
-				proj_it->get()->HandleCollision(obj.get());
+				Log::Debug("Collision with projectile");
+				proj_it->get()->HandleCollision(it->get());
+				it->get()->HandleCollision(proj_it->get());
 			}
 			
 			if(proj_it->get()->HasExpired())
@@ -78,27 +79,42 @@ void Scenario::Tick(sf::Time delta_time)
 				++proj_it;
 		}
 
-		if (obj->HasExpired())
+		if (it->get()->HasExpired())
 			it = _objects.erase(it);
 		else 
+			++it;
+	}
+
+	Object * also_erase = nullptr;
+	for (auto it = _objects.begin(); it != _objects.end();)
+	{
+		if(also_erase && also_erase == it->get())
 		{
-			for(auto & object : _objects)
-			{
-				if(object.get() == it->get())
-					continue;
-
-				if (object->IsCollision(obj.get()))
-				{
-					obj->HandleCollision(object.get());
-					object->HandleCollision(obj.get());
-				}
-			}
-
-			if (obj->HasExpired())
-				it = _objects.erase(it);
-			else
-				++it;
+			it = _objects.erase(it);
+			also_erase = nullptr;
+			continue;
 		}
+
+		Log::Debug("Second Ticking ObjectID({})", enum_name(it->get()->_id));
+
+		for(auto & object : _objects)
+		{
+			if(object.get() == it->get())
+				continue;
+
+			if (object->IsCollision(it->get()))
+			{
+				Log::Debug("Collision with another object");
+				it->get()->HandleCollision(object.get());
+				object->HandleCollision(it->get());
+				also_erase = object.get();
+			}
+		}
+
+		if (it->get()->HasExpired())
+			it = _objects.erase(it);
+		else
+			++it;
 	}
 }
 

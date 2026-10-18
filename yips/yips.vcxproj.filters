@@ -91,7 +91,9 @@
     <ClCompile Include="Projectile.cpp">
       <Filter>scene\object\projectile</Filter>
     </ClCompile>
-    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="PowerUp.cpp">
+      <Filter>scene\object\power_up</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="app">
@@ -135,6 +137,9 @@
     </Filter>
     <Filter Include="scene\object\Item">
       <UniqueIdentifier>{8da04306-8abe-4a93-a199-7613d4979959}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scene\object\power_up">
+      <UniqueIdentifier>{abdf5fdb-f256-4462-8325-a7b56ff5c17b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -240,7 +245,9 @@
     <ClInclude Include="Projectile.h">
       <Filter>scene\object\projectile</Filter>
     </ClInclude>
-    <ClInclude Include="Item.h" />
+    <ClInclude Include="PowerUp.h">
+      <Filter>scene\object\power_up</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="notes.txt">

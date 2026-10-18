@@ -8,7 +8,6 @@ public:
 	std::random_device rseed;
 	std::mt19937 _rng;
 	
-
 	Random() : _rng(rseed())
 	{
 		//srand((unsigned int)(time(0)));
@@ -29,5 +28,10 @@ public:
 		}
 		//return T(min + (rand() % max));
 	}
-};
 
+	template<typename T>
+	T GenerateEnumerator()
+	{
+		return (T)Generate((int)0, (int)enum_count<T>() - 1);
+	}
+};

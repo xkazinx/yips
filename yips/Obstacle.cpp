@@ -2,9 +2,10 @@
 #include "Obstacle.h"
 #include "ScenarioScene.h"
 #include "Scenes.h"
-#include "Item.h"
+#include "PowerUp.h"
 #include "Scenario.h"
 #include "Projectile.h"
+#include "Random.h"
 
 Obstacle::Obstacle(ObstacleType type)
 	: Object(ObjectID::Obstacle), _type(type) {}
@@ -39,7 +40,7 @@ void Obstacle::HandleCollision(Object * obj)
 	case Sprite:
 	case Object:
 	case Obstacle:
-	case Item:
+	case PowerUp:
 	case None:
 	default:
 		return;
@@ -56,7 +57,9 @@ void Obstacle::HandleCollision(Object * obj)
 
 		if (scene->_last_killed_obstacle_cnt >= 4)
 		{
-			g_scene->Get<ScenarioScene>()->_scenario->AddObject<Object>(make_unique<Item>(ItemType::Velocity, GetPosition()));
+			g_scene->Get<ScenarioScene>()->_scenario->AddObject<Object>(
+				make_unique<PowerUp>(g_rand->GenerateEnumerator<PowerUpID>(), GetPosition())
+			);
 		}
 	}
 	else 

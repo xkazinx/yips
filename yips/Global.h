@@ -19,7 +19,7 @@ namespace Global
 	extern App * g_app;
 	extern unique_ptr<Random> g_rand;
 
-	constexpr char kDataFolder[] = "..\\data\\";
+	constexpr char kDataFolder[] = ".\\data\\";
 	constexpr char kScenarioFolder[] = "scenario\\";
 
 	enum class SceneID 
@@ -39,7 +39,7 @@ namespace Global
 		Object, // Scenario Object
 		Obstacle,
 		Projectile,
-		Item,
+		PowerUp,
 
 		None = u8(-1)
 	};
@@ -56,19 +56,63 @@ namespace Global
 		None = u8(-1)
 	};
 	
-	enum class ItemType : u8
+	enum class PowerUpID : u8
 	{
-		GreenEnergy,
+		Energy = 0,
 		Velocity,
 		Invincible,
+		Ammo_Ability1,
+		Ammo_Ability2,
+		Ammo_Ability3,
+		Ammo_Ability4,
+		Ammo_Ability5,
+		Ammo_Ability6,
+		Ammo_Ability7,
+		Ammo_Ability8,
+
+		None = u8(-1)
 	};
 
-	enum class PowerUp : u8
+	enum class AbilityID : u8
 	{
-		Velocity,
-		Invincible,
-		RightLaser,
-		LeftLaser,
+		Ability1,
+		Ability2,
+		Ability3,
+		Ability4,
+		Ability5,
+		Ability6,
+		Ability7,
+		Ability8,
+
+		None = u8(-1)
+	};
+
+	enum class ItemID : u8
+	{
+		Item1,
+		Item2,
+		Item3,
+		Item4,
+		Item5,
+		Item6,
+		Item7,
+		Item8,
+
+		None = u8(-1)
+	};
+
+	enum class InventorySlotID : u8
+	{
+		Item1,
+		Item2,
+		Item3,
+		Item4,
+		Item5,
+		Item6,
+		Item7,
+		Item8,
+
+		None = u8(-1)
 	};
 
 	using ChunkIdx = u16;
@@ -97,6 +141,11 @@ namespace Global
 namespace scenario
 {
 	static constexpr auto kNameSize = 64u;
+}
+
+namespace projectile
+{
+
 }
 
 using namespace Global;

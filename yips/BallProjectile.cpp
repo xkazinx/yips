@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "BallProjectile.h"
-#include "Item.h"
+#include "PowerUp.h"
 
 BallProjectile::BallProjectile(Vector2f origin) 
 	: Projectile(ProjectileID::Ball, origin)
@@ -41,15 +41,16 @@ void BallProjectile::HandleCollision(Object* obj)
 
 	Log::Debug("BallProjectile::HandleCollision(ObjectID({}))", enum_name(obj->_id));
 
-	auto expire = false;
+	//auto expire = false;
+	auto expire = true;
 
 	using enum ObjectID;
 	switch (obj->_id)
 	{
 	case Ship:
 		break;
+
 	case Sprite:
-		break;
 	case Object:
 	case Obstacle:
 		expire = true;
@@ -63,14 +64,14 @@ void BallProjectile::HandleCollision(Object* obj)
 			break;
 		}
 		break;
-	case Item:
-		switch (obj->Get<::Item>()->_type)
+	case PowerUp:
+		switch (obj->Get<::PowerUp>()->_id)
 		{
-		case ItemType::GreenEnergy:
+		case PowerUpID::Energy:
 			break;
-		case ItemType::Velocity:
+		case PowerUpID::Velocity:
 			break;
-		case ItemType::Invincible:
+		case PowerUpID::Invincible:
 			break;
 		}
 		break;

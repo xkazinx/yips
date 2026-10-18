@@ -23,11 +23,13 @@ public:
 
 	Sprite * _ship_sprite;
 
-	vector<PowerUp> _power_ups;
+	vector<PowerUpID> _power_ups;
 
-	bool IsPowerUp(PowerUp power_up)
+	bool IsPowerUp(PowerUpID power_up)
 	{
 		return ranges::find(_power_ups, power_up) != _power_ups.end();
 	}
+
+	
 };
 

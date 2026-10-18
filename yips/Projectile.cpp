@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Projectile.h"
-#include "Item.h"
+#include "PowerUp.h"
 
 Projectile::Projectile(ProjectileID projectile_id, Vector2f origin)
 	: Object(ObjectID::Projectile, origin), _projectile_id(projectile_id)
@@ -48,14 +48,14 @@ void Projectile::HandleCollision(Object* obj)
 			break;
 		}
 		break;
-	case Item:
-		switch (obj->Get<::Item>()->_type)
+	case PowerUp:
+		switch (obj->Get<::PowerUp>()->_id)
 		{
-		case ItemType::GreenEnergy:
+		case PowerUpID::Energy:
 			break;
-		case ItemType::Velocity:
+		case PowerUpID::Velocity:
 			break;
-		case ItemType::Invincible:
+		case PowerUpID::Invincible:
 			break;
 		}
 		break;

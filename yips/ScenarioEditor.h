@@ -83,6 +83,6 @@ public: // Section: Top menu
 
 	RemakeStack _remake_stack;
 
-	void PlayScenario();
+	static void PlayScenario(string name = "");
 };
 

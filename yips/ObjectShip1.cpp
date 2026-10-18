@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "ObjectShip1.h"
 #include "Sprite.h"
-#include "Item.h"
+#include "PowerUp.h"
+#include "Scenes.h"
+#include "ScenarioScene.h"
 
 ObjectShip1::ObjectShip1() 
 	: Object(ObjectID::Ship)
@@ -57,7 +59,9 @@ void ObjectShip1::HandleCollision(Object* obj)
 	if (HasExpired())
 		return;
 
-	Log::Debug("HandleCollision(ObjectID({}))", enum_name(obj->_id));
+	Log::Debug("ObjectShip1::HandleCollision(ObjectID({}))", enum_name(obj->_id));
+
+	auto scene = g_scene->Get<ScenarioScene>();
 
 	using enum ObjectID;
 	switch (obj->_id)
@@ -72,17 +76,29 @@ void ObjectShip1::HandleCollision(Object* obj)
 		break;
 	case Projectile:
 		break;
-	case Item:
+	case PowerUp:
 		Log::Debug("Ship collided with Item!");
-		switch (obj->Get<::Item>()->_type)
+		switch (obj->Get<::PowerUp>()->_id)
 		{
-		using enum ItemType;
-		case GreenEnergy:
+		using enum PowerUpID;
+		case Energy:
+			scene->_total_energies++;
 			break;
 		case Velocity:
-			_power_ups.push_back(PowerUp::Velocity);
+			//_power_ups.push_back(PowerUp::Velocity);
 			break;
 		case Invincible:
+			break;
+
+		case Ammo_Ability1:
+		case Ammo_Ability2:
+		case Ammo_Ability3:
+		case Ammo_Ability4:
+		case Ammo_Ability5:
+		case Ammo_Ability6:
+		case Ammo_Ability7:
+		case Ammo_Ability8:
+			scene->ChargeAbilityAmmo(obj->Get<::PowerUp>()->_id, 3);
 			break;
 		}
 		break;
@@ -103,7 +119,7 @@ void ObjectShip1::Render(sf::RenderTarget& wnd, sf::Time delta_time)
 
 	float velocity = 250.f;
 
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || IsPowerUp(PowerUp::Velocity))
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)/* || IsPowerUp(PowerUp::Velocity)*/)
 		velocity *= 2.f;
 
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))

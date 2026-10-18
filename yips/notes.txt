@@ -10,9 +10,7 @@ Objects
 	Obstacles
 		
 TODO:
-	- Object class as types (eg. Sprite, sf::Shape)
-	- 
-
+	- Object class as types (eg. Sprite, sf::Shape) 
 
 Scene
 	Scenario
@@ -80,3 +78,7 @@ void SGame::Update(const sf::Time & delta)
 		else ++it;
 	}
 }
+
+
+Version 1:
+Inspiración basada en B-Wings

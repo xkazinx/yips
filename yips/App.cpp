@@ -95,4 +95,6 @@ void App::RenderText(string text, Vector2f pos, uint size,
 		pre_draw_fnc(sf_text);
 
 	_wnd.draw(sf_text);
+
+	sf_text.setRotation(0.f);
 }

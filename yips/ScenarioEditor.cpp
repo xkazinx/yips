@@ -210,10 +210,7 @@ void ScenarioEditor::Render(sf::RenderWindow & wnd, sf::Time delta_time)
 
 		if (_scenario && !_scenario->_name.empty() && ImGui::MenuItem("Play Scenario"))
 		{
-			auto name = _scenario->_name;
-			g_scene->Set(SceneID::Scenario);
-			g_scene->Get<ScenarioScene>()->_scenario = make_unique<Scenario>(LoadJson(kDataFolder + string(kScenarioFolder) + name));
-			g_scene->Get<ScenarioScene>()->Initialize();
+			PlayScenario(_scenario->_name);
 			return;
 		}
 
@@ -507,35 +504,14 @@ vector<Object*> ScenarioEditor::GetSelectedObjects()
 	return objects;
 }
 
-void ScenarioEditor::PlayScenario()
+void ScenarioEditor::PlayScenario(string name)
 {
-	// Method without saving
-	if(true){
-		unique_ptr<Scenario> scenario_to_play = std::move(_scenario);
-
-		//auto name = _scenario->_name;
-		//SaveScenario(name);
-
-		g_scene->Set(SceneID::Scenario);
-		ScenarioScene * scene = g_scene->Get<ScenarioScene>();
-	
-		scene->_scenario = std::move(scenario_to_play);
+	if(name.empty())
+	{
+		// Give scenario a "Unnamed" name and play it	
 	}
 
-	// Method via saving
-	/*{
-		if(_scenario->_name.empty())
-		{
-			ImGui::OpenPopup("SaveScenarioModal");
-			return;
-		}
-
-		SaveScenario(_scenario->_name);
-		
-		auto file_name = _scenario->_name;
-
-		g_scene->Set(SceneID::Scenario);
-		ScenarioScene * scene = g_scene->Get<ScenarioScene>();
-		scene->_scenario = make_unique<Scenario>(LoadJson(kDataFolder + "scenario\\"s + file_name));
-	}*/
+	g_scene->Set(SceneID::Scenario);
+	g_scene->Get<ScenarioScene>()->_scenario = make_unique<Scenario>(LoadJson(kDataFolder + string(kScenarioFolder) + name));
+	g_scene->Get<ScenarioScene>()->Initialize();
 }

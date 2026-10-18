@@ -39,8 +39,6 @@ void BallObstacle::HandleCollision(Object* obj)
 	if(HasExpired())
 		return;
 
-	Log::Debug("BallObstacle::HandleCollision(ObjectID({}))", enum_name(obj->_id));
-
 	using enum ObjectID;
 	switch (obj->_id)
 	{
@@ -54,14 +52,15 @@ void BallObstacle::HandleCollision(Object* obj)
 		break;
 	case Projectile:
 		break;
-	case Item:
-		break;
+	case PowerUp:
+		return;
 	case None:
 		break;
 	default:
 		break;
 	}
 
+	Log::Debug("BallObstacle::HandleCollision(ObjectID({}))", enum_name(obj->_id));
 	Obstacle::HandleCollision(obj);
 }
 
