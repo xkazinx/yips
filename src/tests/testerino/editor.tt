@@ -1,0 +1,116 @@
+# The scenario editor: Ctrl+E, a new scenario, obstacles placed by clicks on the world,
+# selected and aligned / separated, saved, opened again from its file and played.
+# node src\dep\kazilib\testerino\tt.js run src\tests\testerino\editor.tt
+include lib\yips.tt SLOT=2
+
+# Ctrl+E from the start screen
+key ctrl+e
+waitfor scene=ScenarioEditor 5000
+expect ok
+state
+expect data.menu == true
+expect data.tool == Position
+shot 01_editor_empty
+image ${CHECKOUT}\testerino\client_2\shots\01_editor_empty.png
+
+# Nothing to edit yet: Up / Down / Ctrl+P / a click do nothing (Up used to end it)
+hold up 300
+expect ok
+key ctrl+p
+state
+expect data.scene == ScenarioEditor
+expect data.status ~ no scenario to play
+
+# A new scenario of 8 chunks
+editor new 8
+expect data.chunks == 8
+expect data.obstacles == 0
+
+# A real click on the world places one where it lands (Position tool)...
+click 600 400
+state
+expect data.obstacles == 1
+# ...but not on the editor's own window
+keep MX=data.menu_x
+keep MY=data.menu_y
+calc CX=${MX}+20
+calc CY=${MY}+20
+click ${CX} ${CY}
+state
+expect data.obstacles == 1
+
+# Three more, by world point
+editor place 300 200
+editor place 420 260
+editor place 540 320
+expect data.obstacles == 4
+shot 02_placed
+image ${CHECKOUT}\testerino\client_2\shots\02_placed.png
+
+# Selection: nothing selected, a task says so
+editor tool Selection
+expect data.tool == Selection
+editor task AlignHorizontally
+expect data.status ~ nothing selected
+editor select all
+expect data.selected == 4
+editor task AlignHorizontally
+expect data.status ~ AlignHorizontally: 4
+shot 03_aligned
+image ${CHECKOUT}\testerino\client_2\shots\03_aligned.png
+editor task SeparateHorizontally 20
+expect data.status ~ SeparateHorizontally: 4
+editor task AlignVertically
+expect data.status ~ AlignVertically: 4
+editor task SeparateVertically 10
+expect data.status ~ SeparateVertically: 4
+shot 04_separated
+image ${CHECKOUT}\testerino\client_2\shots\04_separated.png
+editor select none
+expect data.selected == 0
+
+# F1 hides and shows the menu
+key f1
+expect data.menu == false
+key f1
+expect data.menu == true
+
+# Save: a bad name is refused, a new one saved
+editor save bad/name
+expect fail not a file name
+editor save tt_editor_routine
+expect data.scenario == tt_editor_routine
+expect data.status ~ Saved tt_editor_routine (4 obstacles)
+# Saving over itself is fine; another new scenario cannot take the name
+editor save tt_editor_routine
+expect ok
+editor new 4
+editor save tt_editor_routine
+expect fail taken
+
+# Opened again from its file: the 4 obstacles where they were saved
+editor open tt_editor_routine
+expect data.obstacles == 4
+expect data.chunks == 8
+editor open no_such_scenario
+expect fail open
+
+# Ctrl+P plays it
+key ctrl+p
+waitfor scene=Scenario 5000
+expect ok
+state
+expect data.scenario == tt_editor_routine
+expect data.obstacles == 4
+expect data.chunks == 8
+shot 05_playing
+image ${CHECKOUT}\testerino\client_2\shots\05_playing.png
+
+# Back to the editor, the play from the menu's verb
+scene ScenarioEditor
+editor open tt_editor_routine
+editor play
+expect data.scene == Scenario
+expect data.obstacles == 4
+
+quit

@@ -1,0 +1,22 @@
+# Libraries fetched by setup.ps1
+/src/dep/SFML-3.1.0
+# Intermediates
+/src/build/
+/src/.vs/
+/.vs/
+*.user
+# Build output
+/deploy/*.exe
+/deploy/*.dll
+/deploy/*.pdb
+/deploy/*.lib
+/deploy/*.exp
+/deploy/*.old*
+/deploy/imgui.ini
+/deploy/exceptions/
+# Helbreath sprite paks kept beside the data, read by nothing in yips (213 MB)
+/deploy/data/sprites/
+# Testerino endpoints, shots and reports (the routines are in src/tests/testerino/),
+# and the scenarios its routines save
+/testerino/
+/deploy/data/scenario/tt_*

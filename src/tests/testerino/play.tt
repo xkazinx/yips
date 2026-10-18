@@ -1,0 +1,138 @@
+# The game: the start screen, Enter into the scenario, the ship's keys, shooting,
+# obstacles destroyed, the power up a streak drops and the power ups the ship takes.
+# node src\dep\kazilib\testerino\tt.js run src\tests\testerino\play.tt
+include lib\yips.tt
+
+# The title slides up, then the prompt shows
+wait 1500
+shot 01_start
+expect ok
+image ${CHECKOUT}\testerino\client_1\shots\01_start.png
+
+# Enter: the Scenario scene, the ship, A's 99 shots, one energy spent on A's level
+key enter
+waitfor scene=Scenario 5000
+expect ok
+state
+expect data.chunks == 16
+expect data.energies == 0
+expect data.ammo.4 == 99
+expect data.levels.4 == 1
+expect data.ammo.0 == 0
+expect data.projectiles == 0
+shot 02_scenario
+image ${CHECKOUT}\testerino\client_1\shots\02_scenario.png
+
+# Left / Right / Up / Down move the ship on screen (the view is turned 180 degrees)
+state
+keep PX=data.ship_px
+hold right 400
+expect data.ship_px > ${PX}
+keep PX=data.ship_px
+hold left 400
+expect data.ship_px < ${PX}
+keep PY=data.ship_py
+hold up 400
+expect data.ship_py < ${PY}
+keep PY=data.ship_py
+hold down 400
+expect data.ship_py > ${PY}
+
+# Shift doubles the speed: the same hold goes further (at least 1.5 times)
+state
+keep A=data.ship_px
+hold left 400
+keep B=data.ship_px
+calc D1=${A}-${B}
+down shift
+keep A=data.ship_px
+hold left 400
+keep B=data.ship_px
+up shift
+calc D2=${A}-${B}
+calc D1X=${D1}*3/2
+if ${D2} < ${D1X}
+  shift_did_not_speed_up_the_ship ${D1} ${D2}
+end
+
+# A fires: one projectile, one shot spent
+key a
+expect data.shots == 1
+expect data.ammo.4 == 98
+expect data.projectiles == 1
+shot 03_shot
+image ${CHECKOUT}\testerino\client_1\shots\03_shot.png
+# Off screen it ends (it never did before: projectiles piled up forever)
+waitfor projectiles=0 5000
+expect ok
+
+# Keys without ammo spend nothing
+key q
+expect data.ammo.0 == 0
+expect data.shots == 1
+
+# Ctrl+Q with no energy left: no level
+key ctrl+q
+expect data.levels.0 == 0
+
+# An Energy power up on the ship: taken, one energy, then Ctrl+Q spends it on Q's level
+powerup Energy 0
+waitfor power_ups_taken=1 3000
+expect ok
+state
+expect data.energies == 1
+expect data.power_ups == 0
+key ctrl+q
+expect data.levels.0 == 1
+expect data.energies == 0
+
+# Ammo power ups give their ability 3 shots
+powerup Ammo_Ability2 0
+waitfor power_ups_taken=2 3000
+expect ok
+state
+expect data.ammo.1 == 3
+key w
+expect data.ammo.1 == 2
+
+# Velocity / Invincible are kept on the ship
+powerup Velocity 0
+waitfor power_ups_taken=3 3000
+expect ok
+state
+expect data.ship_power_ups.0 == Velocity
+
+# Shooting obstacles: each one hit is destroyed, the 4th in a row drops a power up
+# (it used to be added while the scenario looped over its objects)
+for N in 1 2 3 4
+  obstacle 150
+  key a
+  waitfor destroyed=${N} 3000
+  expect ok
+  waitfor projectiles=0 5000
+  expect ok
+end
+state
+expect data.destroyed == 4
+expect data.obstacles == 0
+expect data.power_ups == 1
+shot 04_power_up_dropped
+image ${CHECKOUT}\testerino\client_1\shots\04_power_up_dropped.png
+
+# O and L add obstacles at the top of the screen
+key o
+key l
+state
+expect data.obstacles >= 2
+
+# F3 turns the numbers overlay off and on
+key f3
+expect data.debug_overlay == false
+shot 05_no_overlay
+image ${CHECKOUT}\testerino\client_1\shots\05_no_overlay.png
+key f3
+expect data.debug_overlay == true
+
+# Escape ends the program: it is gone before it can answer
+key escape
+expect fail ended

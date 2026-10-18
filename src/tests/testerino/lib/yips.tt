@@ -1,0 +1,8 @@
+# yips in slot SLOT, behind the windows in use (background), its bridge on and
+# exceptions ending it with a report (catchexceptions). Waits for the Start scene.
+# Stopped at the end of the routine that includes it.
+default SLOT=1
+start client_${SLOT} cwd=${CHECKOUT}\deploy exe=${CHECKOUT}\deploy\yips.exe timeout=30000 -- testerino=${SLOT} background catchexceptions title=t${SLOT}
+use client_${SLOT}
+waitfor scene=Start 10000
+expect ok
