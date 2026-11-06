@@ -1,6 +1,8 @@
 # yips
 A vertical space shooter (inspired by B-Wings) with a scenario editor, on SFML, ImGui and kazilib.
 
+**Made without AI** until the first Claude commit (16fba16, 2026-10-18); AI was used after that for the updated deployment and this README.
+
 **Play it in your browser: https://kazin.dev/projects/yips/**
 
 ![Scenario t3 played: the ship fires up a column of obstacles, two destroyed](docs/screenshot.png)
