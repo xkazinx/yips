@@ -4,8 +4,8 @@
 
 | Repo | Commit | State |
 |---|---|---|
-| yips | master: the web / deploy commit (this file's) on `ae39c8b` | pushed |
-| kazilib (`src/dep/kazilib`) | master `a28bf1b` (ImGui in a browser, browser.js steps) on `a216c7d` | pushed |
+| yips | master: the showcase retake with stars (this file's) on `9241a80` (the web / deploy commit) | pushed |
+| kazilib (`src/dep/kazilib`) | master `ad10d04` (points drawn in a browser: the star field) on `a28bf1b` (ImGui in a browser) | pushed |
 
 The kazilib pointer moved from `10d9db9` to master. kazilib master needed two fixes in yips:
 `ranges::` is kazilib's now (`containers.h`), so pch.h's alias went, and Testerino uses
@@ -27,9 +27,13 @@ The kazilib pointer moved from `10d9db9` to master. kazilib master needed two fi
   (a second run used to fail 3 checks on the file the first run left).
 - **Deployed:** https://kazin.dev/projects/yips/ (`deploy_ubuntu.ps1`, static files in
   `/opt/yips/web`, Caddy snippet `kazin.dev.d/yips.caddy`).
-- **Showcase:** `docs\showcase\1_start` .. `5_open.png` (live page, `src\tests\web\showcase.json`),
-  `docs\screenshot.png` (= 3_battle), kazin.dev photos `docs\showcase\kazin\yips.jpg`,
-  `yips-1` .. `yips-4.jpg` (1024x768). The portfolio repo is not edited.
+- **Star field in a browser:** `Background.cpp`'s `sf::PrimitiveType::Points` stars were 0 px
+  on WebGL (the GL ES 1 emulation never set `gl_PointSize`); fixed in kazilib `ad10d04`
+  by the coordinator, rebuilt and deployed.
+- **Showcase (retaken with stars):** `docs\showcase\1_start` .. `5_open.png` (live page,
+  `src\tests\web\showcase.json`), `docs\screenshot.png` (= 3_battle), kazin.dev photos
+  `docs\showcase\kazin\yips.jpg` (= 2_play), `yips-1` .. `yips-4.jpg` (1024x768). The
+  portfolio repo is not edited.
 
 ## Tested
 
@@ -38,7 +42,7 @@ The kazilib pointer moved from `10d9db9` to master. kazilib master needed two fi
 | Testerino `play.tt` (native) | 108 passed, 0 failed |
 | Testerino `editor.tt` (native, run twice in a row) | 86 passed, 0 failed (both) |
 | `src\tests\web\run_web_test.ps1` (local build, headless Edge) | passed |
-| same, `-Url https://kazin.dev/projects/yips/` | passed |
+| same, `-Url https://kazin.dev/projects/yips/` | passed (again after `ad10d04`'s deploy) |
 
 Known gaps: only Edge headless (SwiftShader) tested. No Firefox / Safari, no phone, no real
 GPU, no system clipboard to or from other apps (the clipboard was only checked within the page).
@@ -52,3 +56,4 @@ GPU, no system clipboard to or from other apps (the clipboard was only checked w
 
 1. "now I want you standarize the work and do the same with the githubs of yip, yips, tileship, tiled, nft, use various agents if well scoped"
 2. "all the process we've done with tictactoe"
+3. "I don't see the yip background"
