@@ -81,6 +81,7 @@ public:
 	char _new_scenario_chunks[4] = { "32" };
 	char _separation[4] = { "15" };
 	string _status;	// the last action's result, shown in the menu
+	string _status_printed;	// _status as last printed to the console (browser tests wait on it)
 
 public: // Section: Top menu
 	bool _top_menu_opened = true;

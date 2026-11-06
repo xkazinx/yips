@@ -1,6 +1,10 @@
 # yips
 A vertical space shooter (inspired by B-Wings) with a scenario editor, on SFML, ImGui and kazilib.
 
+**Play it in your browser: https://kazin.dev/projects/yips/**
+
+![Scenario t3 played: the ship fires up a column of obstacles, two destroyed](docs/screenshot.png)
+
 ## Libraries
 
 | Library | Version | Where |
@@ -60,6 +64,53 @@ node src\dep\kazilib\testerino\tt.js run src\tests\testerino\editor.tt
 Reports in `testerino\reports\`, screenshots in `testerino\client_<slot>\shots\`.
 Verbs: `state`, `scene`, `key <k|ctrl+k> [times]`, `hold <key> <ms>`, `down` / `up <key>`,
 `click x y`, `obstacle <ahead_px> [wave|linear|still]`, `powerup <PowerUpID> [ahead_px]`,
-`editor new|open|save|tool|place|select|task|play|menu`, `shot`, `close`, `quit`; conditions
+`editor new|open|save|delete|tool|place|select|task|play|menu`, `shot`, `close`, `quit`; conditions
 for `waitfor`: `scene=`, `obstacles`, `power_ups`, `projectiles`, `destroyed`,
 `power_ups_taken` (`=`, `>`, `<`). `help` lists them.
+
+## In a web browser
+
+Play at **https://kazin.dev/projects/yips/**. It's the same game and editor, compiled to
+WebAssembly (Emscripten) against kazilib's web port (`src\dep\kazilib\web\`, its README).
+SFML 3.1's window runs on SDL3 there, its drawing on WebGL2, and ImGui draws through SFML
+(kazilib's imgui-SFML, `kazilib_web_imgui`).
+
+- **Keys in a browser:** E (or Ctrl+E) opens the editor, and Esc goes back to the Start
+  screen (a page can't exit; Esc while typing in a box stays in the box). Everything
+  else works as on Windows.
+- **Scenarios** `t1` .. `t3` are preloaded under `/data/scenario`. The editor saves into
+  the page's memory (MEMFS), so the saves are lost when the page reloads.
+- **Scaled Window** (the default), **Original Size** and **Fullscreen** under the game
+  (kazilib `web/shell.html`); the query string holds the launch flags.
+- No sound yet (yips has none), and no Testerino bridge in a browser.
+
+```
+powershell -ExecutionPolicy Bypass -File build_web.ps1
+```
+
+`build_web.ps1` builds `src\CMakeLists.txt` (the web build only; Windows uses
+`yips.vcxproj`) into `src\build\web\yips-build\` (`index.html`, `.js`, `.wasm`, `.data`). It uses
+the shared web SFML in `D:\code\tools\kazilib-web` (`-WebDeps <folder>`), which
+`src\dep\kazilib\web\build_deps.ps1` builds when it's missing, and Emscripten from
+`D:\code\tools\emsdk`. `-Jobs N` limits parallel compiles, `-Debug` adds Emscripten's checks.
+
+Test: `src\tests\web\run_web_test.ps1` serves the build to headless Edge (kazilib
+`web\tools\browser.js`). It plays a few seconds (obstacles, moving, shooting), then runs
+the editor: New with a typed size, four obstacles placed, Save As (typing, Ctrl+A / C / V),
+more saves, Open with the wheel scrolling its list, and Ctrl+P plays the result.
+`-Url https://kazin.dev/projects/yips/` runs the same steps against the live page.
+Screenshots go to `testerino\web\`. `src\tests\web\showcase.json` re-shoots `docs\showcase\`
+from the live page (`node src\dep\kazilib\web\tools\browser.js --url https://kazin.dev/projects/yips/ --steps src\tests\web\showcase.json`).
+
+## Deployment
+
+```
+powershell -ExecutionPolicy Bypass -File deploy_ubuntu.ps1   # web build, upload, install
+```
+
+`deploy_ubuntu.ps1` builds the web version and sends it to the box `kazin-music` with
+`deploy\ubuntu\`, where `install.sh` swaps the files into `/opt/yips/web` whole (a
+visitor never gets half of two builds). Caddy serves them through
+`/etc/caddy/sites/kazin.dev.d/yips.caddy` (`/projects/yips/`, revalidated each visit).
+The installer validates the snippet first and restarts Caddy only when the snippet
+changed. There's no server or service: yips is single player.

@@ -234,7 +234,7 @@ void ScenarioEditor::DrawMenu()
 		}
 		else
 		{
-			strncpy_s(_new_scenario_name, _scenario->_name.c_str(), _TRUNCATE);
+			snprintf(_new_scenario_name, sizeof(_new_scenario_name), "%s", _scenario->_name.c_str());	// truncated to fit (portable strncpy_s _TRUNCATE)
 			ImGui::OpenPopup("SaveScenarioModal");
 		}
 	}
@@ -352,6 +352,12 @@ void ScenarioEditor::DrawPopups()
 
 void ScenarioEditor::Tick(const sf::Time delta_time)
 {
+	if (_status != _status_printed)
+	{
+		_status_printed = _status;
+		Print("Editor: {}", _status);
+	}
+
 	// So that the obstacles don't move, the scenario does not tick here
 	if (!_scenario)
 		return;

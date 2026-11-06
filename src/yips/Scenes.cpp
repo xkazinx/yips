@@ -7,6 +7,7 @@
 Scenes::Scenes() : Scene(SceneID::None)
 {
 	_ptr = make_unique<StartScene>();
+	Print("Scene: {}", enum_name(SceneID::Start));
 }
 
 bool Scenes::HandleEvents(const sf::Event & event)

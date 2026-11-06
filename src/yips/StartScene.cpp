@@ -29,7 +29,12 @@ bool StartScene::HandleEvents(const sf::Event & event)
 			return true;
 		}
 
+#ifdef __EMSCRIPTEN__
+		// A browser may keep Ctrl+E for itself (its search box): E alone opens it too
+		if (key->code == sf::Keyboard::Key::E)
+#else
 		if (key->code == sf::Keyboard::Key::E && (key->control || input::IsCtrl()))
+#endif
 		{
 			g_scene->Set(SceneID::ScenarioEditor);
 			return true;
@@ -67,5 +72,10 @@ void StartScene::Render(sf::RenderWindow & wnd, const sf::Time delta_time)
 	};
 
 	g_app->RenderText("Press Enter to start game", { g_res_x / 2.f, g_res_y / 2.f * 1.5f }, 50, sf::Color::White, centred);
-	g_app->RenderText("Ctrl+E: scenario editor   Esc: exit", { g_res_x / 2.f, g_res_y / 2.f * 1.5f + 60.f }, 20, sf::Color(160, 160, 160), centred);
+#ifdef __EMSCRIPTEN__
+	constexpr const char * kKeys = "E: scenario editor   Esc: back here";
+#else
+	constexpr const char * kKeys = "Ctrl+E: scenario editor   Esc: exit";
+#endif
+	g_app->RenderText(kKeys,{ g_res_x / 2.f, g_res_y / 2.f * 1.5f + 60.f }, 20, sf::Color(160, 160, 160), centred);
 }

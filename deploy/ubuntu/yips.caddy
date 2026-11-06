@@ -1,0 +1,12 @@
+# yips (github.com/xkazinx/yips) at kazin.dev/projects/yips: the web build, static
+# (single player, no server). Written by deploy/ubuntu/install.sh. Imported inside the
+# kazin.dev site block (`import /etc/caddy/sites/kazin.dev.d/*.caddy`).
+redir /projects/yips /projects/yips/ permanent
+
+# The web build, with the prefix taken off; revalidated each visit (a new build keeps
+# its names)
+handle_path /projects/yips/* {
+	root * /opt/yips/web
+	header Cache-Control "no-cache"
+	file_server
+}

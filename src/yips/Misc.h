@@ -1,5 +1,17 @@
 #pragma once
 
+#include <chrono>
+
+// Milliseconds on a steady clock (timeGetTime on Windows; a browser has none)
+inline u32 NowMs()
+{
+#ifdef _WIN32
+	return timeGetTime();
+#else
+	return (u32)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
+#endif
+}
+
 class Misc
 {
 public:

@@ -46,7 +46,7 @@ void BallObstacle::Tick(const sf::Time delta_time)
 		const float x = kLength * std::cos(_angle_x);
 		const float y = 250.f;
 
-		if (timeGetTime() > _move_timer)
+		if (NowMs() > _move_timer)
 		{
 			_angle_x += kAngleStep;
 			if (_angle_x >= 256)
@@ -56,7 +56,7 @@ void BallObstacle::Tick(const sf::Time delta_time)
 			if (_angle_y >= 256)
 				_angle_y = 0.f;
 
-			_move_timer = timeGetTime() + 100;
+			_move_timer = NowMs() + 100;
 		}
 
 		Move(-x * delta_time.asSeconds(), -y * delta_time.asSeconds());

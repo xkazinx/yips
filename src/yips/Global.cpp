@@ -28,11 +28,17 @@ namespace global
 
 	const Path & DataFolder()
 	{
+#ifdef _WIN32
 		static const Path kPath = [] {
 			char exe[MAX_PATH] = {};
 			GetModuleFileNameA(nullptr, exe, MAX_PATH);
 			return Path(exe).parent_path() / "data";
 		}();
+#else
+		// A browser: the files preloaded into /data (src\CMakeLists.txt); scenarios saved
+		// there live in memory for the page's session
+		static const Path kPath = "/data";
+#endif
 		return kPath;
 	}
 }

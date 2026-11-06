@@ -1,5 +1,17 @@
 #include "pch.h"
 #include "Testerino.h"
+
+#ifndef _WIN32
+// A browser build has no bridge (its files, its process): the calls do nothing
+namespace testerino
+{
+	void Start() {}
+	void Pump() {}
+	void AfterDraw(sf::RenderWindow &) {}
+	void Stop() {}
+	bool Active() { return false; }
+}
+#else
 #include "App.h"
 #include "Scenes.h"
 #include "ScenarioScene.h"
@@ -182,7 +194,7 @@ namespace testerino
 
 		void AddEditorVerb()
 		{
-			g_run.Add("editor", "editor <new [chunks] | open <name> | save <name> | tool <Position|Selection> | place <x> <y> | select <all|none> | task <SelectionTask> [separation] | play | menu <on|off>>",
+			g_run.Add("editor", "editor <new [chunks] | open <name> | save <name> | delete tt_<name> | tool <Position|Selection> | place <x> <y> | select <all|none> | task <SelectionTask> [separation] | play | menu <on|off>>",
 				"the scenario editor's actions, the ones its menu runs (place: a click on that world point with the current tool)", [](const tcore::Cmd & c, tcore::Job & j) {
 				auto e = g_scene->Get<ScenarioEditor>();
 				if (!e)
@@ -208,6 +220,15 @@ namespace testerino
 						return j.Fail("cannot save as '" + c.Arg(1) + "' (taken or not a file name)");
 					if (!e->SaveScenario(c.Arg(1)))
 						return j.Fail(e->_status);
+				}
+				else if (what == "delete")
+				{
+					// Only a routine's own scenarios (tt_*): a run starts without the last run's
+					const string name = c.Arg(1);
+					if (!name.starts_with("tt_") || name.find_first_of("/\\:") != string::npos)
+						return j.Fail("editor delete tt_<name> (a routine's scenario)");
+					std::error_code ec;
+					std::filesystem::remove(ScenarioFolder() / name, ec);
 				}
 				else if (what == "tool")
 				{
@@ -426,7 +447,7 @@ namespace testerino
 		}
 
 		g_active = true;
-		std::cout << "Testerino: listening on " << g_ep.Dir().string() << "\n";
+		std::cout << "Testerino: listening on " << g_ep._dir.string() << "\n";
 	}
 
 	void Pump()
@@ -484,3 +505,4 @@ namespace testerino
 		return g_active;
 	}
 }
+#endif // _WIN32

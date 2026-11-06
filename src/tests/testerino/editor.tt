@@ -21,6 +21,12 @@ state
 expect data.scene == ScenarioEditor
 expect data.status ~ no scenario to play
 
+# The scenario an earlier run saved goes first (the save below needs a new name)
+editor delete tt_editor_routine
+expect ok
+editor delete ../t1
+expect fail tt_
+
 # A new scenario of 8 chunks
 editor new 8
 expect data.chunks == 8

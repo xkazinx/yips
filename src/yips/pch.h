@@ -1,6 +1,8 @@
 #pragma once
 
+#ifdef _WIN32
 #include <Windows.h>
+#endif
 
 #include <SFML/Graphics.hpp>
 using sf::Vector2f;
@@ -46,7 +48,7 @@ using std::format;
 using Path = std::filesystem::path;
 
 #include <ranges>
-namespace ranges = std::ranges;
+// ranges:: is kazilib's (containers.h: namespace ranges { using namespace std::ranges; })
 namespace views = std::ranges::views;
 
 #include <stack>
